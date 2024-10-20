@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final Function(File) onImagePicked; // Callback to pass the selected image
@@ -26,6 +28,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         setState(() {
           image = File(pickedFile.path);
         });
+        GetIt.I<Talker>().info('Image has been selected');
         widget.onImagePicked(
             image!); // Passing the selected image through the callback
       }

@@ -6,8 +6,12 @@ import 'package:medvisual/src/repository/models/visual_disease_model.dart';
 import 'package:mime/mime.dart';
 
 class VisualRequest {
+  VisualRequest({required this.dio});
+
+  final Dio dio;
+
   // Request for getting an AI opinion about image
-  static Future<List<VisualDisease>> createVisualRequest(
+  Future<List<VisualDisease>> createVisualRequest(
       List<String> presumedDiseases, File image) async {
     await dotenv.load(fileName: ".env"); // loading file of enviroment
     try {
@@ -20,7 +24,7 @@ class VisualRequest {
         )
       });
 
-      final response = await Dio().post(
+      final response = await dio.post(
         // If no endpoint-api in .env throw exception about it
         dotenv.env['ENDPOINT-API'] ??
             (throw Exception(

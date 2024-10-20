@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/features/visual/widgets/image_picker_widget.dart';
+import 'package:medvisual/src/features/visual/widgets/visual_bottom_sheet.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -75,66 +76,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               },
             ),
           ),
-          BlocListener<VisualInformationBloc, VisualInformationState>(
-            bloc: _visualInformationBloc,
-            listener: (context, state) {
-              if (state is VisualInformationLoaded) {
-                showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ListView.builder(
-                        itemCount: state.visualDiseses.length,
-                        itemBuilder: (context, index) {
-                          final disease = state.visualDiseses[index];
-                          return Container(
-                            padding: const EdgeInsets.all(10),
-                            margin: const EdgeInsets.all(10),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Center(
-                                    child: Text(
-                                  disease.name,
-                                  style: theme.textTheme.titleLarge,
-                                )),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Вероятность',
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                    Text(disease.probability.toString())
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Вердикт',
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                    Text(disease.verdict)
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Обратите внимание!',
-                                      style: theme.textTheme.bodyLarge,
-                                    ),
-                                    Text(disease.advice)
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    });
-              }
-            },
-            child: const SizedBox.shrink(),
-          )
+          VisualBottomSheet(visualInformationBloc: _visualInformationBloc)
         ],
       ),
     );

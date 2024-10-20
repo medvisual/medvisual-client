@@ -19,5 +19,16 @@ class AppTheme {
           )),
       fontFamily: GoogleFonts.getFont('Unbounded').fontFamily,
       useMaterial3: true);
-  static final darkTheme = ThemeData(useMaterial3: true);
+  static final darkTheme = ThemeData(
+    useMaterial3: true,
+    primaryColor: colors.first,
+    textTheme: const TextTheme(
+        titleLarge: TextStyle(
+          color: Colors.white,
+        ),
+        bodyLarge: TextStyle(
+          color: Colors.white,
+        )),
+    fontFamily: GoogleFonts.getFont('Unbounded').fontFamily,
+  );
 }

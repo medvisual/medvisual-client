@@ -5,7 +5,6 @@ import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/features/visual/widgets/image_picker_widget.dart';
 import 'package:medvisual/src/features/visual/widgets/visual_bottom_sheet.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:medvisual/src/ui/widgets/base_button.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});

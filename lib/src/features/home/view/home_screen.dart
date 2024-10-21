@@ -14,9 +14,9 @@ class HomeScreen extends StatelessWidget {
     return AutoTabsRouter(
       routes: const [
         CategoriesRoute(),
-        FavoriteRoute(),
         ChatRoute(),
-        ProfileRoute()
+        ProfileRoute(),
+        SettingsRoute()
       ],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);

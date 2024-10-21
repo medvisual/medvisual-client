@@ -48,25 +48,6 @@ class ChatRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [FavoriteScreen]
-class FavoriteRoute extends PageRouteInfo<void> {
-  const FavoriteRoute({List<PageRouteInfo>? children})
-      : super(
-          FavoriteRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'FavoriteRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const FavoriteScreen();
-    },
-  );
-}
-
-/// generated route for
 /// [HomeScreen]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})

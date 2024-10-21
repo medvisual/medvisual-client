@@ -16,8 +16,6 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
       routerConfig: _router.config(),
     );
   }

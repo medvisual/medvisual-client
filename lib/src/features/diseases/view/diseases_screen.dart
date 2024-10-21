@@ -8,6 +8,7 @@ class DiseasesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         title: Text(
           category,
         ),
@@ -27,8 +28,9 @@ class DiseasesScreen extends StatelessWidget {
             title: Center(
               child: Container(
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.08,
                 margin: const EdgeInsets.all(3),
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     border: const Border(
                       top: BorderSide(

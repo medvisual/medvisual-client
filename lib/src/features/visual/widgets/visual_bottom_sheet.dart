@@ -42,17 +42,20 @@ class VisualBottomSheet extends StatelessWidget {
                             Center(
                                 child: Text(
                               disease.name,
-                              style: theme.textTheme.titleLarge,
+                              style: theme.textTheme.titleLarge
+                                  ?.copyWith(color: Colors.black),
                             )),
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   'Вероятность',
-                                  style: theme.textTheme.bodyLarge,
+                                  style: theme.textTheme.bodyLarge
+                                      ?.copyWith(color: Colors.black),
                                 ),
                                 Flexible(
-                                    child: Text(disease.probability.toString()))
+                                    child:
+                                        Text('${disease.probability * 100}%'))
                               ],
                             ),
                             Column(
@@ -60,7 +63,8 @@ class VisualBottomSheet extends StatelessWidget {
                               children: [
                                 Text(
                                   'Вердикт',
-                                  style: theme.textTheme.bodyLarge,
+                                  style: theme.textTheme.bodyLarge
+                                      ?.copyWith(color: Colors.black),
                                 ),
                                 Flexible(child: Text(disease.verdict))
                               ],
@@ -70,7 +74,8 @@ class VisualBottomSheet extends StatelessWidget {
                               children: [
                                 Text(
                                   'Обратите внимание!',
-                                  style: theme.textTheme.bodyLarge,
+                                  style: theme.textTheme.bodyLarge
+                                      ?.copyWith(color: Colors.black),
                                 ),
                                 Flexible(child: Text(disease.advice))
                               ],

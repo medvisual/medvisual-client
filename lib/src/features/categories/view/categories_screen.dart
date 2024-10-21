@@ -12,20 +12,32 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final categories = {
+      'Неврология': 'brain',
+      'Ортопедия': 'bone',
+      'Педиатрия': 'bear',
+      'Офтальмология': 'eye',
+      'Психиатрия': 'butterfly',
+      'Другие': 'other'
+    };
     return CustomScrollView(
       slivers: [
         const CustomAppBar(),
         SliverList(
-            delegate: SliverChildBuilderDelegate(childCount: 10,
+            delegate: SliverChildBuilderDelegate(childCount: categories.length,
                 (BuildContext context, int index) {
+          final categoryName = categories.keys.toList()[index];
+          final categoryIcon = categories.values.toList()[index];
           return BaseListContainer(
-            text: 'Отделение',
+            text: categoryName,
+            icon: 'assets/icons/$categoryIcon.svg',
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          const DiseasesScreen(category: 'Отделение')));
+                      builder: (context) => DiseasesScreen(
+                            category: categoryName,
+                          )));
             },
           );
         })),

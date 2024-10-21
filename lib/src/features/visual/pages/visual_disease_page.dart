@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/features/visual/widgets/image_picker_widget.dart';
 import 'package:medvisual/src/features/visual/widgets/visual_bottom_sheet.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:medvisual/src/ui/widgets/base_button.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -25,38 +27,41 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
     });
   }
 
-// Function for getting informatgion from ai from backend
+// Function for getting information from ai from backend
   void _getVisualDiseases(File image) {
     _visualInformationBloc.add(GetVisualDecision(
-        presumedDiseases: ['COVID-19, Pneumonia, Tumor'], image: image));
+        presumedDiseases: ['Цироз печени, Пневмония, Рак легких'],
+        image: image));
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Center(
       child: Column(
         children: [
           const SizedBox(height: 20),
           // Passing callback to update the image
           ImagePickerWidget(onImagePicked: _updateImage),
-          const SizedBox(height: 30),
-          showErrorChooseImage
-              ? Text(
-                  'Сначала выберите изображение!',
-                  style: TextStyle(color: theme.indicatorColor),
-                )
-              : const SizedBox.shrink(),
-          const SizedBox(height: 30),
+          const SizedBox(height: 60),
           ElevatedButton(
             onPressed: image != null
                 ? () {
                     _getVisualDiseases(image!);
                   }
                 : () {
-                    setState(() {
-                      showErrorChooseImage = true;
-                    });
+                    final snackBar = SnackBar(
+                      content: Center(
+                        child: Text(
+                          'Выберите изображение',
+                          style: TextStyle(color: theme.indicatorColor),
+                        ),
+                      ),
+                      backgroundColor: theme.canvasColor,
+                      duration: const Duration(seconds: 2),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
             child: BlocBuilder<VisualInformationBloc, VisualInformationState>(
               bloc: _visualInformationBloc,
@@ -65,9 +70,9 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                   return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 40, vertical: 6),
-                    child: CircularProgressIndicator(
+                    child: LoadingAnimationWidget.stretchedDots(
                       color: theme.primaryColor,
-                      strokeWidth: 2.5,
+                      size: 40,
                     ),
                   );
                 }

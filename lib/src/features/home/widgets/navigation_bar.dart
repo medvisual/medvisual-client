@@ -1,14 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_route/auto_route.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class CustomNavigationBar extends StatefulWidget {
-  const CustomNavigationBar({
-    super.key,
-    required this.currentIndex,
-  });
+  const CustomNavigationBar({super.key, required this.currentIndex});
   final int currentIndex;
-
   @override
   State<CustomNavigationBar> createState() => _CustomNavigationBarState();
 }
@@ -17,28 +14,30 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BottomNavigationBar(
-        currentIndex: widget.currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-              activeIcon: Icon(Icons.home_rounded, size: 30),
-              icon: Icon(Icons.home_outlined, size: 30),
-              label: 'Категории'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.star_outline_rounded, size: 30),
-              activeIcon: Icon(Icons.star_rounded, size: 30),
-              label: 'Избранное'),
-          BottomNavigationBarItem(
-              activeIcon: Icon(Icons.message_rounded, size: 30),
-              icon: Icon(Icons.message_outlined, size: 30),
-              label: 'Чаты'),
-          BottomNavigationBarItem(
-              activeIcon: Icon(Icons.person_rounded, size: 30),
-              icon: Icon(Icons.person_outline_rounded, size: 30),
-              label: 'Профиль'),
+    return CurvedNavigationBar(
+        backgroundColor: theme.canvasColor,
+        items: [
+          Icon(
+            Icons.home_rounded,
+            size: 30,
+            color:
+                widget.currentIndex == 0 ? theme.primaryColor : theme.hintColor,
+          ),
+          Icon(
+            Icons.message_rounded,
+            size: 30,
+            color:
+                widget.currentIndex == 1 ? theme.primaryColor : theme.hintColor,
+          ),
+          Icon(
+            Icons.person_rounded,
+            size: 30,
+            color:
+                widget.currentIndex == 2 ? theme.primaryColor : theme.hintColor,
+          ),
         ],
-        selectedItemColor: theme.primaryColor,
-        unselectedItemColor: theme.hintColor,
+        buttonBackgroundColor: theme.canvasColor,
+        height: 75,
         onTap: (index) {
           setState(() {
             AutoTabsRouter.of(context).setActiveIndex(index);

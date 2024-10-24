@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:medvisual/src/repository/models/visual_disease_model.dart';
+import 'package:medvisual/src/repository/models/visual_disease_model/visual_disease_model.dart';
 import 'package:medvisual/src/repository/requests/create_visual_request.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -14,7 +15,7 @@ class VisualInformationBloc
     on<GetVisualDecision>((event, emit) async {
       emit(VisualInformationLoading());
       try {
-        final visualRequest = GetIt.I<VisualRequest>();
+        final visualRequest = VisualRequest(dio: GetIt.I<Dio>());
         List<VisualDisease> visualDiseses = await visualRequest
             .createVisualRequest(event.presumedDiseases, event.image);
         emit(VisualInformationLoaded(visualDiseses: visualDiseses));

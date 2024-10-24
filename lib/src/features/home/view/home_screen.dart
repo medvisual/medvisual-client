@@ -16,12 +16,11 @@ class HomeScreen extends StatelessWidget {
         CategoriesRoute(),
         ChatRoute(),
         ProfileRoute(),
-        SettingsRoute()
       ],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
-          body: child,
+          body: SafeArea(child: child),
           bottomNavigationBar: CustomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
           ),

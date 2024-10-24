@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+//beautiful color? Color(0xFF003459)
 const primaryColor = Color(0xFF4D4DFF);
 const gradientColor = Color(0xFF006BFF);
 const secondaryColor = Color.fromARGB(255, 59, 93, 196);
@@ -25,6 +26,7 @@ final darkTheme = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: true,
   primaryColor: primaryColor,
+  canvasColor: Colors.black,
   textTheme: const TextTheme(
       titleLarge: TextStyle(
         color: Colors.white,

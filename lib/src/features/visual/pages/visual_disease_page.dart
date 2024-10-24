@@ -51,14 +51,17 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                   }
                 : () {
                     final snackBar = SnackBar(
-                      content: Center(
-                        child: Text(
-                          'Выберите изображение',
-                          style: TextStyle(color: theme.indicatorColor),
-                        ),
+                      content: Wrap(
+                        children: [
+                          Center(
+                            child: Text(
+                              'Пожалуйста, выберите фото',
+                              style: TextStyle(color: theme.indicatorColor),
+                            ),
+                          )
+                        ],
                       ),
                       backgroundColor: theme.canvasColor,
-                      duration: const Duration(seconds: 2),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
@@ -80,7 +83,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               },
             ),
           ),
-          VisualBottomSheet(visualInformationBloc: _visualInformationBloc)
+          VisualBottomSheet(visualInformationBloc: _visualInformationBloc),
         ],
       ),
     );

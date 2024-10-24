@@ -15,7 +15,7 @@ class AppRouter extends RootStackRouter {
           AutoRoute(page: CategoriesRoute.page, path: 'categories'),
           AutoRoute(page: ChatRoute.page, path: 'chats'),
           AutoRoute(page: ProfileRoute.page, path: 'profile'),
-          AutoRoute(page: SettingsRoute.page, path: 'settings'),
         ]),
+        AutoRoute(page: SettingsRoute.page, path: '/settings'),
       ];
 }

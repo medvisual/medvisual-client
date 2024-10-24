@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/features/categories/widgets/search_widget.dart';
+import 'package:medvisual/src/features/categories/widgets/settings_button.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
@@ -12,23 +13,17 @@ class CustomAppBar extends StatelessWidget {
     return SliverAppBar(
       title: Text(
         'Medvisual',
-        style: theme.textTheme.titleLarge
-            ?.copyWith(fontWeight: FontWeight.bold, fontSize: 30),
+        style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold, fontSize: 30, color: Colors.black),
       ),
-      actions: [
-        Container(
-          margin: const EdgeInsets.only(right: 10),
-          child: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.settings),
-            color: theme.canvasColor,
-          ),
-        ),
+      actions: const [
+        SettingsButton(),
       ],
-      backgroundColor: theme.primaryColor,
+      backgroundColor: theme.canvasColor,
       surfaceTintColor: Colors.transparent,
-      pinned: true,
-      floating: true,
+      pinned: false,
+      floating: false,
+      stretch: false,
       bottom: const PreferredSize(
         preferredSize: Size(double.infinity, 70),
         child: SearchWidget(),

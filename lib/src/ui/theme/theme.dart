@@ -8,6 +8,7 @@ const secondaryColor = Color.fromARGB(255, 59, 93, 196);
 const thirdColor = Color.fromARGB(255, 166, 188, 255);
 
 final lightTheme = ThemeData(
+  canvasColor: const Color(0xFFF7FAFC),
   indicatorColor: Colors.red,
   brightness: Brightness.light,
   primaryColor: primaryColor,

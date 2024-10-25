@@ -13,8 +13,15 @@ class DiseasesListBloc extends Bloc<DiseasesListEvent, DiseasesListState> {
       try {
         emit(DiseasesListLoading());
         final diseaseRequest = DiseaseRequest(dio: GetIt.I<Dio>());
-        final diseasesList = await diseaseRequest.getDiseaseList();
-        emit(DiseasesListLoaded(diseasesList: diseasesList));
+        final allDiseasesList = await diseaseRequest.getDiseaseList();
+        final categoryDiseasesList = allDiseasesList;
+        // TODO: Change for departemnt sort
+        // final categoryDiseases = allDiseasesList.map((disease) {
+        //   if (disease.department == '') {
+        //     return disease;
+        //   }
+        // }) as List<Disease>;
+        emit(DiseasesListLoaded(diseasesList: categoryDiseasesList));
       } catch (e) {
         emit(DiseasesListError(error: e.toString()));
       }

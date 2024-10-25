@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:medvisual/src/bloc/diseases_list_bloc/diseases_list_bloc.dart';
-import 'package:medvisual/src/features/visual/view/visual_screen.dart';
+import 'package:medvisual/src/features/diseases/widgets/widgets.dart';
+import 'package:medvisual/src/router/router.dart';
 
+@RoutePage()
 class DiseasesScreen extends StatefulWidget {
   const DiseasesScreen({super.key, required this.category});
   final String category;
@@ -24,7 +26,18 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.router.push(const AddDiseaseRoute());
+        },
+        backgroundColor: theme.primaryColor,
+        child: Icon(
+          Icons.add,
+          color: theme.canvasColor,
+        ),
+      ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         title: Text(
@@ -38,6 +51,12 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
                 child: Icon(Icons.search_rounded),
               ))
         ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.router.back();
+          },
+        ),
       ),
       body: BlocBuilder<DiseasesListBloc, DiseasesListState>(
         bloc: _diseasesListBloc,
@@ -46,54 +65,42 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
             return ListView.builder(
               itemCount: state.diseasesList.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Center(
-                    child: Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      margin: const EdgeInsets.all(3),
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: const Border(
-                            top: BorderSide(
-                              color: Colors.black,
-                            ),
-                            bottom: BorderSide(
-                              color: Colors.black,
-                            ),
-                            left: BorderSide(
-                              color: Colors.black,
-                            ),
-                            right: BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                          borderRadius: BorderRadius.circular(25)),
-                      child:
-                          Center(child: Text(state.diseasesList[index].name)),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const VisualScreen(disease: 'Пневмония')));
-                  },
+                return DiseasesListContainer(
+                  index: index,
+                  name: state.diseasesList[index].name,
                 );
               },
             );
           } else if (state is DiseasesListLoading) {
-            final theme = Theme.of(context);
-            return Center(
-              child: LoadingAnimationWidget.stretchedDots(
-                color: theme.primaryColor,
-                size: 40,
-              ),
+            return ListView.builder(
+              // child: LoadingAnimationWidget.stretchedDots(
+              //   color: theme.primaryColor,
+              //   size: 60,
+              // ),
+              itemCount: 9,
+              itemBuilder: (context, index) {
+                return const ShimmerComtainer();
+              },
             );
           } else {
-            return const Center(
-              child: Text('Something went wrong...'),
+            final theme = Theme.of(context);
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Что-то пошло не так...',
+                    style: theme.textTheme.titleLarge
+                        ?.copyWith(color: theme.colorScheme.onSurface),
+                  ),
+                  Text(
+                    'Пожалуйста попробуйте позже',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    ),
+                  ),
+                ],
+              ),
             );
           }
         },

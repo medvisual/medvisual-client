@@ -10,6 +10,25 @@
 part of 'router.dart';
 
 /// generated route for
+/// [AddDiseasePage]
+class AddDiseaseRoute extends PageRouteInfo<void> {
+  const AddDiseaseRoute({List<PageRouteInfo>? children})
+      : super(
+          AddDiseaseRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AddDiseaseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AddDiseasePage();
+    },
+  );
+}
+
+/// generated route for
 /// [CategoriesScreen]
 class CategoriesRoute extends PageRouteInfo<void> {
   const CategoriesRoute({List<PageRouteInfo>? children})
@@ -45,6 +64,52 @@ class ChatRoute extends PageRouteInfo<void> {
       return const ChatScreen();
     },
   );
+}
+
+/// generated route for
+/// [DiseasesScreen]
+class DiseasesRoute extends PageRouteInfo<DiseasesRouteArgs> {
+  DiseasesRoute({
+    Key? key,
+    required String category,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DiseasesRoute.name,
+          args: DiseasesRouteArgs(
+            key: key,
+            category: category,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DiseasesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DiseasesRouteArgs>();
+      return DiseasesScreen(
+        key: args.key,
+        category: args.category,
+      );
+    },
+  );
+}
+
+class DiseasesRouteArgs {
+  const DiseasesRouteArgs({
+    this.key,
+    required this.category,
+  });
+
+  final Key? key;
+
+  final String category;
+
+  @override
+  String toString() {
+    return 'DiseasesRouteArgs{key: $key, category: $category}';
+  }
 }
 
 /// generated route for

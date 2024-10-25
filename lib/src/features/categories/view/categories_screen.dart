@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/features/categories/widgets/app_bar.dart';
-import 'package:medvisual/src/features/diseases/view/diseases_screen.dart';
+import 'package:medvisual/src/router/router.dart';
 import 'package:medvisual/src/ui/widgets/base_list_container.dart';
 
 @RoutePage()
@@ -32,12 +32,7 @@ class CategoriesScreen extends StatelessWidget {
             text: categoryName,
             icon: 'assets/icons/$categoryIcon.svg',
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DiseasesScreen(
-                            category: categoryName,
-                          )));
+              context.router.push(DiseasesRoute(category: categoryName));
             },
           );
         })),

@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:medvisual/src/features/categories/view/categories_screen.dart';
 import 'package:medvisual/src/features/chats/view/chat_screen.dart';
+import 'package:medvisual/src/features/diseases/pages/add_disease/view/add_diseases_page.dart';
+import 'package:medvisual/src/features/diseases/view/diseases_screen.dart';
 import 'package:medvisual/src/features/home/view/home_screen.dart';
 import 'package:medvisual/src/features/profile/view/profile_screen.dart';
 import 'package:medvisual/src/features/settings/view/settings_screen.dart';
@@ -17,5 +20,7 @@ class AppRouter extends RootStackRouter {
           AutoRoute(page: ProfileRoute.page, path: 'profile'),
         ]),
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
+        AutoRoute(page: DiseasesRoute.page, path: '/diseases'),
+        AutoRoute(page: AddDiseaseRoute.page, path: '/add_disease')
       ];
 }

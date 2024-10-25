@@ -6,7 +6,7 @@ class BaseButton extends StatelessWidget {
 
   const BaseButton({required this.text, required this.onPressed, super.key});
 
-  final double borderRadius = 25;
+  final double borderRadius = 12;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +14,7 @@ class BaseButton extends StatelessWidget {
     return DecoratedBox(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            gradient: LinearGradient(
-                colors: [theme.primaryColor, theme.canvasColor])),
+            color: theme.primaryColor),
         child: ElevatedButton(
             style: ButtonStyle(
                 elevation: WidgetStateProperty.all(0),
@@ -30,7 +29,8 @@ class BaseButton extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               text,
-              style: const TextStyle(color: Colors.white),
+              style:
+                  theme.textTheme.bodyLarge?.copyWith(color: theme.canvasColor),
             )));
   }
 }

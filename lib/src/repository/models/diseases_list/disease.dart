@@ -5,12 +5,12 @@ part 'disease.g.dart';
 @JsonSerializable()
 class Disease {
   const Disease(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.description,
       required this.department});
 
-  final int id;
+  final int? id;
   final String name;
   final String description;
   final String department;

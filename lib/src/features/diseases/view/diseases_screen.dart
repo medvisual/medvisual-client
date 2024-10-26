@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:medvisual/src/bloc/diseases_list_bloc/diseases_list_bloc.dart';
+import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/features/diseases/widgets/widgets.dart';
 import 'package:medvisual/src/router/router.dart';
 
@@ -16,7 +16,7 @@ class DiseasesScreen extends StatefulWidget {
 
 class _DiseasesScreenState extends State<DiseasesScreen> {
   // Bloc init
-  final _diseasesListBloc = DiseasesListBloc();
+  final _diseasesListBloc = DiseasesBloc();
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           },
         ),
       ),
-      body: BlocBuilder<DiseasesListBloc, DiseasesListState>(
+      body: BlocBuilder<DiseasesBloc, DiseasesState>(
         bloc: _diseasesListBloc,
         builder: (context, state) {
           if (state is DiseasesListLoaded) {
@@ -73,6 +73,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
             );
           } else if (state is DiseasesListLoading) {
             return ListView.builder(
+              // or this
               // child: LoadingAnimationWidget.stretchedDots(
               //   color: theme.primaryColor,
               //   size: 60,

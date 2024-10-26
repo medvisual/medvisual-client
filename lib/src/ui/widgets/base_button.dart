@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class BaseButton extends StatelessWidget {
-  final String text;
+  final Widget content;
   final Function() onPressed;
+  final double? width;
 
-  const BaseButton({required this.text, required this.onPressed, super.key});
+  const BaseButton(
+      {required this.onPressed, super.key, required this.content, this.width});
 
   final double borderRadius = 12;
 
@@ -27,10 +29,6 @@ class BaseButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(borderRadius)),
                 )),
             onPressed: onPressed,
-            child: Text(
-              text,
-              style:
-                  theme.textTheme.bodyLarge?.copyWith(color: theme.canvasColor),
-            )));
+            child: SizedBox(width: width, child: Center(child: content))));
   }
 }

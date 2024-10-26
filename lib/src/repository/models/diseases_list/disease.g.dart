@@ -7,7 +7,7 @@ part of 'disease.dart';
 // **************************************************************************
 
 Disease _$DiseaseFromJson(Map<String, dynamic> json) => Disease(
-      id: (json['id'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
       department: json['department'] as String,

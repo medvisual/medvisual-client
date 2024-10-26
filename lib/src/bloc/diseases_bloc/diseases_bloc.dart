@@ -4,11 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/repository/models/diseases_list/disease.dart';
 import 'package:medvisual/src/repository/requests/disease_request.dart';
 
-part 'diseases_list_event.dart';
-part 'diseases_list_state.dart';
+part 'diseases_event.dart';
+part 'diseases_state.dart';
 
-class DiseasesListBloc extends Bloc<DiseasesListEvent, DiseasesListState> {
-  DiseasesListBloc() : super(DiseasesListInitial()) {
+class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
+  DiseasesBloc() : super(DiseasesListInitial()) {
     on<GetDiseasesList>((event, emit) async {
       try {
         emit(DiseasesListLoading());
@@ -24,6 +24,22 @@ class DiseasesListBloc extends Bloc<DiseasesListEvent, DiseasesListState> {
         emit(DiseasesListLoaded(diseasesList: categoryDiseasesList));
       } catch (e) {
         emit(DiseasesListError(error: e.toString()));
+      }
+    });
+
+    on<AddDisease>((event, emit) async {
+      try {
+        final diseaseRequest = DiseaseRequest(dio: GetIt.I<Dio>());
+        emit(AddDiseaseInProgress());
+        Disease disease = Disease(
+            name: event.name,
+            description: event.description,
+            department: event.department);
+        await diseaseRequest.addDisease(disease);
+
+        emit(AddDiseaseComplete());
+      } catch (e) {
+        emit(AddDiseaseError(error: e.toString()));
       }
     });
   }

@@ -7,14 +7,28 @@ import 'package:medvisual/src/features/diseases/pages/add_disease/widgets/inut_f
 import 'package:medvisual/src/ui/widgets/base_button.dart';
 
 @RoutePage()
-class AddDiseasePage extends StatelessWidget {
+class AddDiseasePage extends StatefulWidget {
   const AddDiseasePage({super.key});
 
   @override
+  State<AddDiseasePage> createState() => _AddDiseasePageState();
+}
+
+class _AddDiseasePageState extends State<AddDiseasePage> {
+  final nameTextController = TextEditingController();
+  final detailsTextController = TextEditingController();
+  final addDiseaseBloc = DiseasesBloc();
+
+  @override
+  void dispose() {
+    nameTextController.dispose();
+    detailsTextController.dispose();
+    addDiseaseBloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final nameTextController = TextEditingController();
-    final detailsTextController = TextEditingController();
-    final addDiseaseBloc = DiseasesBloc();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Новая болезнь'),
@@ -26,7 +40,7 @@ class AddDiseasePage extends StatelessWidget {
           },
         ),
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -56,6 +70,7 @@ class AddDiseasePage extends StatelessWidget {
                 builder: (context, state) {
                   final theme = Theme.of(context);
                   if (state is AddDiseaseError) {
+                    // TODO: Change error ui to message, not button text
                     return BaseButton(
                       content: Text(
                         'Ошибка',
@@ -63,26 +78,23 @@ class AddDiseasePage extends StatelessWidget {
                             ?.copyWith(color: theme.canvasColor),
                       ),
                       onPressed: () {
-                        addDiseaseBloc.add(AddDisease(
-                            name: nameTextController.text,
-                            description: detailsTextController.text,
-                            department: 'Неврология'));
+                        addNewDisease(addDiseaseBloc, nameTextController,
+                            detailsTextController);
                       },
                       width: MediaQuery.of(context).size.width,
                     );
                   } else if (state is AddDiseaseInProgress) {
                     return BaseButton(
                         content: LoadingAnimationWidget.stretchedDots(
-                          color: theme.colorScheme.primary,
-                          size: 30,
+                          color: theme.canvasColor,
+                          size: 25,
                         ),
                         onPressed: () {
-                          addDiseaseBloc.add(AddDisease(
-                              name: nameTextController.text,
-                              description: detailsTextController.text,
-                              department: 'Неврология'));
+                          addNewDisease(addDiseaseBloc, nameTextController,
+                              detailsTextController);
                         });
                   } else {
+                    // Success state
                     return BaseButton(
                       content: Text(
                         'Добавить болезнь',
@@ -90,20 +102,28 @@ class AddDiseasePage extends StatelessWidget {
                             ?.copyWith(color: theme.canvasColor),
                       ),
                       onPressed: () {
-                        addDiseaseBloc.add(AddDisease(
-                            name: nameTextController.text,
-                            description: detailsTextController.text,
-                            department: 'Неврология'));
+                        addNewDisease(addDiseaseBloc, nameTextController,
+                            detailsTextController);
                       },
                       width: MediaQuery.of(context).size.width,
                     );
                   }
                 },
-              )
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void addNewDisease(
+      DiseasesBloc addDiseaseBloc,
+      TextEditingController nameTextController,
+      TextEditingController detailsTextController) {
+    addDiseaseBloc.add(AddDisease(
+        name: nameTextController.text,
+        description: detailsTextController.text,
+        department: 'Неврология'));
   }
 }

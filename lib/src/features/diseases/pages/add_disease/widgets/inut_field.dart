@@ -12,6 +12,7 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
@@ -20,43 +21,24 @@ class InputField extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  offset: const Offset(12, 26),
-                  blurRadius: 50,
-                  spreadRadius: 0,
-                  color: Colors.grey.withOpacity(.1)),
-            ]),
-            child: TextField(
-              controller: inputController,
-              onChanged: (value) {
-                //Do something wi
-              },
-              maxLines: maxLines,
-              keyboardType: TextInputType.emailAddress,
-              style: const TextStyle(fontSize: 14, color: Colors.black),
-              decoration: InputDecoration(
+          TextField(
+            controller: inputController,
+            onChanged: (value) {
+              //Do something wi
+            },
+            maxLines: maxLines,
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),
+            decoration: InputDecoration(
                 // prefixIcon: Icon(Icons.email),
-                filled: true,
-                fillColor: const Color(0xFFE8EDF5),
+                filled: theme.inputDecorationTheme.filled,
+                fillColor: theme.inputDecorationTheme.fillColor,
                 hintText: text,
-                hintStyle: const TextStyle(color: Color(0xFF4A739C)),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 20.0),
-                focusedBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(color: Colors.transparent)),
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).indicatorColor, width: 1.0),
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                ),
-                enabledBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    borderSide: BorderSide(color: Colors.transparent)),
-              ),
-            ),
+                hintStyle: theme.inputDecorationTheme.hintStyle,
+                contentPadding: theme.inputDecorationTheme.contentPadding,
+                focusedBorder: theme.inputDecorationTheme.focusedBorder,
+                errorBorder: theme.inputDecorationTheme.errorBorder,
+                enabledBorder: theme.inputDecorationTheme.enabledBorder),
           ),
         ],
       ),

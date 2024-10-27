@@ -16,8 +16,8 @@ class ShimmerComtainer extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.08,
       child: Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: theme.colorScheme.surfaceContainer,
+        highlightColor: theme.colorScheme.surfaceContainerHigh,
         enabled: true,
         child: Container(
           decoration: BoxDecoration(

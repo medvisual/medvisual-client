@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,63 +16,72 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return NavigationBar(
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       selectedIndex: widget.currentIndex,
-      indicatorColor: theme.primaryColor,
-      destinations: [
-        NavigationDestination(
-          selectedIcon: SvgPicture.asset(
-            'assets/icons/home.svg',
-            colorFilter: ColorFilter.mode(theme.canvasColor, BlendMode.srcIn),
-          ),
-          icon: SvgPicture.asset(
-            'assets/icons/home.svg',
-            colorFilter:
-                ColorFilter.mode(theme.colorScheme.onSurface, BlendMode.srcIn),
-          ),
+      indicatorColor: theme.colorScheme.surface,
+      backgroundColor: Colors.transparent,
+      overlayColor: WidgetStatePropertyAll(theme.colorScheme.onSurface),
+      animationDuration: const Duration(milliseconds: 350),
+      destinations: const [
+        NavBarItem(
+          iconName: 'home',
           label: 'Категории',
         ),
-        NavigationDestination(
-          icon: Badge(
-            label: Text('52'),
-            child: SvgPicture.asset(
-              'assets/icons/chat.svg',
-              colorFilter: ColorFilter.mode(
-                  theme.colorScheme.onSurface, BlendMode.srcIn),
-            ),
-          ),
-          selectedIcon: Badge(
-            label: const Text('52'),
-            child: SvgPicture.asset(
-              'assets/icons/chat.svg',
-              colorFilter: ColorFilter.mode(theme.canvasColor, BlendMode.srcIn),
-            ),
-          ),
+        NavBarItem(
+          iconName: 'chat',
           label: 'Сообщения',
+          inBadge: true,
+          badgeText: '52',
         ),
-        NavigationDestination(
-          icon: Badge(
-            child: SvgPicture.asset(
-              'assets/icons/profile.svg',
-              colorFilter: ColorFilter.mode(
-                  theme.colorScheme.onSurface, BlendMode.srcIn),
-            ),
-          ),
-          selectedIcon: Badge(
-            child: SvgPicture.asset(
-              'assets/icons/profile.svg',
-              colorFilter: ColorFilter.mode(
-                  theme.colorScheme.onPrimary, BlendMode.srcIn),
-            ),
-          ),
+        NavBarItem(
+          iconName: 'profile',
           label: 'Профиль',
-        ),
+        )
       ],
       onDestinationSelected: (index) {
         setState(() {
           AutoTabsRouter.of(context).setActiveIndex(index);
         });
       },
+    );
+  }
+}
+
+class NavBarItem extends StatelessWidget {
+  const NavBarItem(
+      {super.key,
+      required this.iconName,
+      this.label,
+      this.inBadge = false,
+      this.badgeText})
+      : assert(badgeText == null || inBadge == true,
+            'If badgeText is provided, inBadge must be true'),
+        assert(badgeText != null || inBadge == false,
+            'If inBadge is true, badgeText must be provided');
+
+  final String iconName;
+  final String? label;
+  final bool? inBadge;
+  final String? badgeText;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return NavigationDestination(
+      icon: inBadge == true
+          ? Badge(
+              label: Text(badgeText!),
+              child: SvgPicture.asset(
+                'assets/icons/$iconName.svg',
+                colorFilter: ColorFilter.mode(
+                    theme.colorScheme.onSurface, BlendMode.srcIn),
+              ),
+            )
+          : SvgPicture.asset(
+              'assets/icons/$iconName.svg',
+              colorFilter: ColorFilter.mode(
+                  theme.colorScheme.onSurface, BlendMode.srcIn),
+            ),
+      label: label != null ? label! : '',
     );
   }
 }

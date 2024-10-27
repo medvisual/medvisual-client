@@ -15,8 +15,8 @@ class SettingsButton extends StatelessWidget {
         onPressed: () {
           AutoTabsRouter.of(context).navigateNamed('/settings');
         },
-        icon: const Icon(Icons.settings_rounded),
-        color: theme.hintColor,
+        icon: const Icon(Icons.settings_applications_sharp),
+        color: theme.hintColor.withOpacity(0.5),
       ),
     );
   }

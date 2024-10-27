@@ -14,16 +14,18 @@ class CustomAppBar extends StatelessWidget {
       title: Text(
         'Medvisual',
         style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold, fontSize: 30, color: Colors.black),
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: theme.colorScheme.onSurface),
       ),
       actions: const [
         SettingsButton(),
       ],
-      backgroundColor: theme.canvasColor,
+      centerTitle: true,
+      backgroundColor: theme.colorScheme.surface,
       surfaceTintColor: Colors.transparent,
-      pinned: false,
-      floating: false,
-      stretch: false,
+      pinned: true,
+      floating: true,
       bottom: const PreferredSize(
         preferredSize: Size(double.infinity, 70),
         child: SearchWidget(),

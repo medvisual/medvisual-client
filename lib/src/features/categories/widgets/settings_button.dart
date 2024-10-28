@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
@@ -15,7 +16,11 @@ class SettingsButton extends StatelessWidget {
         onPressed: () {
           AutoTabsRouter.of(context).navigateNamed('/settings');
         },
-        icon: const Icon(Icons.settings_applications_sharp),
+        icon: SvgPicture.asset(
+          'assets/icons/settings.svg',
+          colorFilter:
+              ColorFilter.mode(theme.colorScheme.onSurface, BlendMode.srcIn),
+        ),
         color: theme.hintColor.withOpacity(0.5),
       ),
     );

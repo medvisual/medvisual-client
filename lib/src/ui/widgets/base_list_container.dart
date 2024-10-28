@@ -23,10 +23,6 @@ class BaseListContainer extends StatelessWidget {
         height: 150,
         decoration: BoxDecoration(
           color: theme.primaryColor,
-          gradient: LinearGradient(colors: [
-            const Color(0xFF3838f5),
-            theme.primaryColor,
-          ]),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(

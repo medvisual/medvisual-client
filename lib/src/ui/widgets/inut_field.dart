@@ -26,6 +26,7 @@ class InputField extends StatelessWidget {
             onChanged: (value) {
               //Do something wi
             },
+            cursorColor: theme.colorScheme.onSurface,
             maxLines: maxLines,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
-import 'package:medvisual/src/features/diseases/pages/add_disease/widgets/inut_field.dart';
+import 'package:medvisual/src/ui/widgets/inut_field.dart';
 import 'package:medvisual/src/ui/widgets/base_button.dart';
 
 @RoutePage()
@@ -94,6 +94,7 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
                               detailsTextController);
                         });
                   } else {
+                    debugPrint(context.router.currentPath);
                     // Success state
                     return BaseButton(
                       content: Text(

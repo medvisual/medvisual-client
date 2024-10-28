@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 //beautiful color? Color(0xFF003459)
-const primaryColor = Color(0xFF4D4DFF);
+const primaryColor = Color(0xFF0D80F2);
 const gradientColor = Color(0xFF006BFF);
 const secondaryColor = Color.fromARGB(255, 59, 93, 196);
 const thirdColor = Color.fromARGB(255, 166, 188, 255);
 
 final lightTheme = ThemeData(
+  colorScheme: const ColorScheme.light(
+      surface: Color(0xFFF7FAFC),
+      surfaceContainer: Color(0xFFE8EDF5),
+      onSecondary: Color(0xFF4A739C)),
   inputDecorationTheme: const InputDecorationTheme(
     // prefixIcon: Icon(Icons.email),
     filled: true,
@@ -28,17 +32,14 @@ final lightTheme = ThemeData(
   indicatorColor: Colors.red,
   brightness: Brightness.light,
   primaryColor: primaryColor,
-  textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        color: Colors.white,
-      ),
-      bodyLarge: TextStyle(
-        color: Colors.white,
-      )),
   fontFamily: GoogleFonts.getFont('Unbounded').fontFamily,
   useMaterial3: true,
 );
 final darkTheme = ThemeData(
+  colorScheme: const ColorScheme.dark(
+      surface: Color(0xFF0F1A24),
+      surfaceContainer: Color(0xFF21364A),
+      onSecondary: Color(0xFF8FADCC)),
   inputDecorationTheme: const InputDecorationTheme(
     // prefixIcon: Icon(Icons.email),
     filled: true,
@@ -60,12 +61,5 @@ final darkTheme = ThemeData(
   useMaterial3: true,
   primaryColor: primaryColor,
   canvasColor: Colors.black,
-  textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        color: Colors.white,
-      ),
-      bodyLarge: TextStyle(
-        color: Colors.white,
-      )),
   fontFamily: GoogleFonts.getFont('Unbounded').fontFamily,
 );

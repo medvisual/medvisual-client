@@ -1,62 +1,62 @@
 import 'package:flutter/material.dart';
 
-class StackNavigationBar extends StatefulWidget {
-  const StackNavigationBar(
-      {super.key, required this.selectedIndex, required this.onSelected});
+class StackNavigationBar extends StatelessWidget {
+  const StackNavigationBar({
+    super.key,
+    required this.selectedIndex,
+    required this.onSelected,
+    required this.items,
+    this.iconSize = 28,
+  }) : assert(items.length >= 2);
+
   final int selectedIndex;
-  final VoidCallback onSelected;
-
-  @override
-  State<StackNavigationBar> createState() => _StackNavigationBarState();
-}
-
-class _StackNavigationBarState extends State<StackNavigationBar> {
-  final double horizontal_margin = 40;
+  final double iconSize;
+  final ValueChanged<int> onSelected;
+  final List<IconData> items;
 
   @override
   Widget build(BuildContext context) {
-    final int index = 0;
     final theme = Theme.of(context);
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30), color: theme.primaryColor),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: horizontal_margin),
-              child: Icon(
-                Icons.home,
-                color: widget.selectedIndex == 0
-                    ? theme.canvasColor
-                    : theme.hintColor,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: horizontal_margin),
-              child: IconButton(
-                onPressed: widget.onSelected,
-                icon: Icon(
-                  Icons.message,
-                  color: widget.selectedIndex == 1
-                      ? theme.canvasColor
-                      : theme.hintColor,
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: horizontal_margin),
-              child: Icon(
-                Icons.person_4,
-                color: widget.selectedIndex == 2
-                    ? theme.canvasColor
-                    : theme.hintColor,
-              ),
-            ),
-          ],
+
+    // Calculate horizontal margins
+    final double horizontalMargin =
+        ((MediaQuery.of(context).size.width - 48) - (items.length * iconSize)) /
+            (items.length * 2);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: List.generate(
+        items.length,
+        (index) => _buildNavItem(
+          icon: items[index],
+          index: index,
+          theme: theme,
+          horizontalMargin: horizontalMargin,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem({
+    required IconData icon,
+    required int index,
+    required ThemeData theme,
+    required double horizontalMargin,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+      child: InkWell(
+        onTap: () => onSelected(index),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Icon(
+            icon,
+            size: iconSize,
+            color: selectedIndex == index
+                ? theme.colorScheme.onSurface
+                : theme.hintColor.withAlpha(120),
+          ),
         ),
       ),
     );

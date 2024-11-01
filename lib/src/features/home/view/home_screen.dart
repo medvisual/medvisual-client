@@ -20,7 +20,12 @@ class HomeScreen extends StatelessWidget {
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
-          body: SafeArea(child: child),
+          extendBody: true,
+          body: Column(
+            children: [
+              Expanded(child: child),
+            ],
+          ),
           bottomNavigationBar: CustomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
           ),

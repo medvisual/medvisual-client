@@ -12,7 +12,6 @@ class DiseaseRequest {
   Future<List<Disease>> getDiseaseList() async {
     try {
       final String endPoint;
-      await dotenv.load(fileName: ".env"); // loading file of enviroment
       if (dotenv.env['ENDPOINT-API'] != null) {
         endPoint = '${dotenv.env['ENDPOINT-API']!}/api/diseases';
       } else {

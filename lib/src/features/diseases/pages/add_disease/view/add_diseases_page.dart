@@ -18,6 +18,7 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
   final nameTextController = TextEditingController();
   final detailsTextController = TextEditingController();
   final addDiseaseBloc = DiseasesBloc();
+  int routerIndex = 0;
 
   @override
   void dispose() {
@@ -111,6 +112,17 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
                   }
                 },
               ),
+              // FIXME: Working on stack navbar // DELETE
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // StackNavigationBar(
+              //     selectedIndex: 0,
+              //     onSelected: (_index) {
+              //       setState(() {
+              //         routerIndex = _index;
+              //       });
+              //     })
             ],
           ),
         ),

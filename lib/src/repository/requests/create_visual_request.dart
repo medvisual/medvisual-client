@@ -13,11 +13,11 @@ class VisualRequest {
   // Request for getting an AI opinion about image
   Future<List<VisualDisease>> createVisualRequest(
       List<String> presumedDiseases, File image) async {
-    await dotenv.load(fileName: ".env"); // loading file of enviroment
     try {
       String? mimeType = lookupMimeType(image.path);
+      print(presumedDiseases.join(', '));
       var formData = FormData.fromMap({
-        'presumedDiseases': presumedDiseases.join(', '), // Backend will get
+        'presumedDiseases[]': presumedDiseases.join(', '), // Backend will get
         'image': await MultipartFile.fromFile(
           image.path,
           contentType: MediaType.parse(mimeType!),

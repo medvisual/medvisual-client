@@ -40,6 +40,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
       ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         title: Text(
           widget.category,
         ),
@@ -78,31 +79,13 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
               //   color: theme.primaryColor,
               //   size: 60,
               // ),
-              itemCount: 9,
+              itemCount: 20,
               itemBuilder: (context, index) {
                 return const ShimmerComtainer();
               },
             );
           } else {
-            final theme = Theme.of(context);
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Что-то пошло не так...',
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(color: theme.colorScheme.onSurface),
-                  ),
-                  Text(
-                    'Пожалуйста попробуйте позже',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
-                    ),
-                  ),
-                ],
-              ),
-            );
+            return const SomethingWrongWidget();
           }
         },
       ),

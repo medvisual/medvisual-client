@@ -23,19 +23,23 @@ class CategoriesScreen extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         const CustomAppBar(),
-        SliverList(
-            delegate: SliverChildBuilderDelegate(childCount: categories.length,
-                (BuildContext context, int index) {
-          final categoryName = categories.keys.toList()[index];
-          final categoryIcon = categories.values.toList()[index];
-          return BaseListContainer(
-            text: categoryName,
-            icon: 'assets/icons/$categoryIcon.svg',
-            onTap: () {
-              context.router.push(DiseasesRoute(category: categoryName));
-            },
-          );
-        })),
+        SliverPadding(
+          padding: const EdgeInsets.only(bottom: 92),
+          sliver: SliverList(
+              delegate:
+                  SliverChildBuilderDelegate(childCount: categories.length,
+                      (BuildContext context, int index) {
+            final categoryName = categories.keys.toList()[index];
+            final categoryIcon = categories.values.toList()[index];
+            return BaseListContainer(
+              text: categoryName,
+              icon: 'assets/icons/$categoryIcon.svg',
+              onTap: () {
+                context.router.push(DiseasesRoute(category: categoryName));
+              },
+            );
+          })),
+        ),
       ],
     );
   }

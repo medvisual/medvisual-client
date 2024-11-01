@@ -28,7 +28,7 @@ class BaseListContainer extends StatelessWidget {
             BoxShadow(
                 color: theme.colorScheme.shadow.withOpacity(0.57),
                 blurRadius: 4,
-                offset: Offset(5, 5))
+                offset: const Offset(5, 5))
           ],
         ),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -36,12 +36,11 @@ class BaseListContainer extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 5),
                   child: SvgPicture.asset(
-                    icon!, // путь к вашему SVG файлу
-                    height: 50, // размер по высоте
-                    width: 50, // размер по ширине
+                    icon!,
+                    height: 50,
+                    width: 50,
                     colorFilter: ColorFilter.mode(
-                        theme.colorScheme.surface, BlendMode.srcIn),
-                    // FIXME: Change deprecated color
+                        theme.colorScheme.onSurface, BlendMode.srcIn),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -51,7 +50,7 @@ class BaseListContainer extends StatelessWidget {
               text,
               style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.surface),
+                  color: theme.colorScheme.onSurface),
             ),
           ),
         ]),

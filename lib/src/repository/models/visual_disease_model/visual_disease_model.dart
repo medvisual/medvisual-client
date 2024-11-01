@@ -16,11 +16,11 @@ class VisualDisease {
   final double probability;
   final String verdict;
 
-  /// Connect the generated [_$PersonFromJson] function to the `fromJson`
+  /// Connect the generated [_$VisualDiseaseFromJson] function to the `fromJson`
   /// factory.
   factory VisualDisease.fromJson(Map<String, dynamic> json) =>
       _$VisualDiseaseFromJson(json);
 
-  /// Connect the generated [_$PersonToJson] function to the `toJson` method.
+  /// Connect the generated [_$VisualDiseaseToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$VisualDiseaseToJson(this);
 }

@@ -133,10 +133,17 @@ class HomeRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginPage]
-class LoginRoute extends PageRouteInfo<void> {
-  const LoginRoute({List<PageRouteInfo>? children})
-      : super(
+class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({
+    Key? key,
+    required VoidCallback onResult,
+    List<PageRouteInfo>? children,
+  }) : super(
           LoginRoute.name,
+          args: LoginRouteArgs(
+            key: key,
+            onResult: onResult,
+          ),
           initialChildren: children,
         );
 
@@ -145,9 +152,29 @@ class LoginRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const LoginPage();
+      final args = data.argsAs<LoginRouteArgs>();
+      return LoginPage(
+        key: args.key,
+        onResult: args.onResult,
+      );
     },
   );
+}
+
+class LoginRouteArgs {
+  const LoginRouteArgs({
+    this.key,
+    required this.onResult,
+  });
+
+  final Key? key;
+
+  final VoidCallback onResult;
+
+  @override
+  String toString() {
+    return 'LoginRouteArgs{key: $key, onResult: $onResult}';
+  }
 }
 
 /// generated route for

@@ -12,30 +12,14 @@ class DiseasesListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.08,
-          margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              border: const Border(
-                top: BorderSide(
-                  color: Colors.black,
-                ),
-                bottom: BorderSide(
-                  color: Colors.black,
-                ),
-                left: BorderSide(
-                  color: Colors.black,
-                ),
-                right: BorderSide(
-                  color: Colors.black,
-                ),
-              ),
-              borderRadius: BorderRadius.circular(25)),
-          child: Center(child: Text(name)),
+    final theme = Theme.of(context);
+    return GestureDetector(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        child: Text(
+          name,
+          style: theme.textTheme.bodyMedium
+              ?.copyWith(color: theme.colorScheme.onSurface),
         ),
       ),
       onTap: () {

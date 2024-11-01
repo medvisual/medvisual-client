@@ -17,12 +17,10 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(page: HomeRoute.page, path: '/', children: [
-          AutoRoute(
-              page: CategoriesRoute.page,
-              path: 'categories',
-              guards: [AuthGuard()]),
+          AutoRoute(page: CategoriesRoute.page, path: 'categories'),
           AutoRoute(page: ChatRoute.page, path: 'chats'),
-          AutoRoute(page: ProfileRoute.page, path: 'profile'),
+          AutoRoute(
+              page: ProfileRoute.page, path: 'profile', guards: [AuthGuard()]),
         ]),
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
         AutoRoute(page: DiseasesRoute.page, path: '/diseases'),

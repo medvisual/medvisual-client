@@ -25,20 +25,25 @@ class CategoriesScreen extends StatelessWidget {
         const CustomAppBar(),
         SliverPadding(
           padding: const EdgeInsets.only(bottom: 92),
-          sliver: SliverList(
+          sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.3,
+              ),
               delegate:
                   SliverChildBuilderDelegate(childCount: categories.length,
                       (BuildContext context, int index) {
-            final categoryName = categories.keys.toList()[index];
-            final categoryIcon = categories.values.toList()[index];
-            return BaseListContainer(
-              text: categoryName,
-              icon: 'assets/icons/$categoryIcon.svg',
-              onTap: () {
-                context.router.push(DiseasesRoute(category: categoryName));
-              },
-            );
-          })),
+                final categoryName = categories.keys.toList()[index];
+                final categoryIcon = categories.values.toList()[index];
+                return BaseListContainer(
+                  text: categoryName,
+                  icon: 'assets/icons/$categoryIcon.svg',
+                  onTap: () {
+                    context.router.push(DiseasesRoute(category: categoryName));
+                  },
+                );
+              })),
         ),
       ],
     );

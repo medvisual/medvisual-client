@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:medvisual/src/ui/widgets/base_button.dart';
 
 class SomethingWrongWidget extends StatelessWidget {
   const SomethingWrongWidget({
     super.key,
+    required this.tryAgainCallback,
   });
+
+  final VoidCallback tryAgainCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,17 @@ class SomethingWrongWidget extends StatelessWidget {
               color: theme.colorScheme.onSurface.withOpacity(0.5),
             ),
           ),
+          const SizedBox(height: 20),
+          BaseButton(
+            onPressed: tryAgainCallback,
+            content: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text('Попробовать снова',
+                  style: TextStyle(
+                      color: theme.colorScheme.onSurface, fontSize: 15)),
+            ),
+            width: MediaQuery.of(context).size.width * 0.6,
+          )
         ],
       ),
     );

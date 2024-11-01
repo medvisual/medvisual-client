@@ -5,7 +5,9 @@ class InputField extends StatelessWidget {
       {super.key,
       required this.inputController,
       required this.text,
-      required this.maxLines});
+      required this.maxLines,
+      this.obscureText});
+  final bool? obscureText;
   final TextEditingController inputController;
   final String text;
   final int maxLines;
@@ -22,6 +24,7 @@ class InputField extends StatelessWidget {
             height: 8,
           ),
           TextField(
+            obscureText: obscureText ?? false,
             controller: inputController,
             onChanged: (value) {
               //Do something wi

@@ -17,10 +17,8 @@ class BaseListContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        width: MediaQuery.of(context).size.width,
-        height: 150,
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(
           color: theme.primaryColor,
           borderRadius: BorderRadius.circular(20),
@@ -31,29 +29,30 @@ class BaseListContainer extends StatelessWidget {
                 offset: const Offset(5, 5))
           ],
         ),
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          icon != null
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: SvgPicture.asset(
-                    icon!,
-                    height: 50,
-                    width: 50,
-                    colorFilter: ColorFilter.mode(
-                        theme.colorScheme.onSurface, BlendMode.srcIn),
-                  ),
-                )
-              : const SizedBox.shrink(),
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Text(
-              text,
-              style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface),
-            ),
-          ),
-        ]),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              icon != null
+                  ? SvgPicture.asset(
+                      icon!,
+                      height: 40,
+                      width: 40,
+                      colorFilter: ColorFilter.mode(
+                          theme.colorScheme.onSurface, BlendMode.srcIn),
+                    )
+                  : const SizedBox.shrink(),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  text,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: theme.colorScheme.onSurface),
+                ),
+              ),
+            ]),
       ),
     );
   }

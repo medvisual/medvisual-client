@@ -85,7 +85,11 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
               },
             );
           } else {
-            return const SomethingWrongWidget();
+            return SomethingWrongWidget(
+              tryAgainCallback: () {
+                _diseasesListBloc.add(GetDiseasesList());
+              },
+            );
           }
         },
       ),

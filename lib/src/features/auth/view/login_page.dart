@@ -60,6 +60,7 @@ class LoginPage extends StatelessWidget {
               InputField(
                   inputController: emailController, text: 'Почта', maxLines: 1),
               InputField(
+                  obscureText: true,
                   inputController: passwordController,
                   text: 'Пароль',
                   maxLines: 1),

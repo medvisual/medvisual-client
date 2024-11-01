@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 //beautiful color? Color(0xFF003459)
-const primaryColor = Color(0xFF0D80F2);
+const primaryColor = Color(0xFF0D92F4);
 const gradientColor = Color(0xFF006BFF);
 const secondaryColor = Color.fromARGB(255, 59, 93, 196);
 const thirdColor = Color.fromARGB(255, 166, 188, 255);

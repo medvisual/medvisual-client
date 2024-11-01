@@ -4,9 +4,14 @@ class BaseButton extends StatelessWidget {
   final Widget content;
   final Function() onPressed;
   final double? width;
+  final EdgeInsets? padding;
 
   const BaseButton(
-      {required this.onPressed, super.key, required this.content, this.width});
+      {required this.onPressed,
+      super.key,
+      required this.content,
+      this.width,
+      this.padding});
 
   final double borderRadius = 12;
 
@@ -20,9 +25,9 @@ class BaseButton extends StatelessWidget {
         child: ElevatedButton(
             style: ButtonStyle(
                 elevation: WidgetStateProperty.all(0),
+                padding:
+                    WidgetStatePropertyAll(padding ?? const EdgeInsets.all(0)),
                 alignment: Alignment.center,
-                padding: WidgetStateProperty.all(const EdgeInsets.only(
-                    right: 75, left: 75, top: 15, bottom: 15)),
                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(

@@ -5,6 +5,7 @@ import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/features/visual/widgets/image_picker_widget.dart';
 import 'package:medvisual/src/features/visual/widgets/visual_bottom_sheet.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:medvisual/src/ui/widgets/widgets.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -44,7 +45,8 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           // Passing callback to update the image
           ImagePickerWidget(onImagePicked: _updateImage),
           const SizedBox(height: 60),
-          ElevatedButton(
+          BaseButton(
+            width: MediaQuery.of(context).size.width * 0.62,
             onPressed: image != null
                 ? () {
                     _getVisualDiseases(image!);
@@ -65,7 +67,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
-            child: BlocBuilder<VisualInformationBloc, VisualInformationState>(
+            content: BlocBuilder<VisualInformationBloc, VisualInformationState>(
               bloc: _visualInformationBloc,
               builder: (context, state) {
                 if (state is VisualInformationLoading) {
@@ -73,13 +75,18 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 40, vertical: 6),
                     child: LoadingAnimationWidget.stretchedDots(
-                      color: theme.primaryColor,
+                      color: theme.colorScheme.onSurface,
                       size: 40,
                     ),
                   );
                 }
-                return Text('Получить информацию',
-                    style: TextStyle(color: theme.primaryColor));
+                return FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    'Получить информацию',
+                    style: TextStyle(color: theme.colorScheme.onSurface),
+                  ),
+                );
               },
             ),
           ),

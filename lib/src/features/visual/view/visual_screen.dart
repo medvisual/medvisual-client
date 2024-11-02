@@ -25,6 +25,11 @@ class _VisualScreenState extends State<VisualScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.disease),
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
           bottom: PreferredSize(
             preferredSize: const Size(double.infinity, 60),
             child: Row(

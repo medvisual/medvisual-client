@@ -15,7 +15,7 @@ class CustomNavigationBar extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(0), // Закругление углов
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0), // Эффект размытия
+        filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0), // Эффект размытия
         child: Container(
           padding: const EdgeInsets.only(bottom: 10),
           height: MediaQuery.of(context).size.height * 0.09,

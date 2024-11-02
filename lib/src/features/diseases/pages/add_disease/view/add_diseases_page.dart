@@ -101,7 +101,7 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
                       content: Text(
                         'Добавить болезнь',
                         style: theme.textTheme.bodyLarge
-                            ?.copyWith(color: theme.canvasColor),
+                            ?.copyWith(color: theme.colorScheme.onSurface),
                       ),
                       onPressed: () {
                         addNewDisease(addDiseaseBloc, nameTextController,

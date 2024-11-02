@@ -7,16 +7,19 @@ class BaseListContainer extends StatelessWidget {
     required this.text,
     this.onTap,
     this.icon,
+    this.width,
   });
   final String text;
   final String? icon;
   final VoidCallback? onTap;
+  final double? width;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: width,
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(

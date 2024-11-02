@@ -35,7 +35,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
         backgroundColor: theme.primaryColor,
         child: Icon(
           Icons.add,
-          color: theme.canvasColor,
+          color: theme.colorScheme.onSurface,
         ),
       ),
       appBar: AppBar(

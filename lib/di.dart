@@ -16,12 +16,17 @@ void setupDependencies() async {
 
   // Firts init secure storage for trying init users
   const secureStorage = FlutterSecureStorage();
-  // Secure storage
-  getIt.registerSingleton(secureStorage);
-
   // Create instances
   final talker = TalkerFlutter.init();
   final dio = Dio();
+  // Secure storage
+  getIt.registerSingleton(secureStorage);
+
+  // Request and dio init
+  getIt.registerLazySingleton(() => dio);
+  // Logger
+  getIt.registerSingleton(talker);
+
   final authManager = AuthManagerBloc();
 
   // Trying get user if it was logged.
@@ -35,10 +40,6 @@ void setupDependencies() async {
       printResponseData: false,
     ),
   ));
-  // Request and dio init
-  getIt.registerLazySingleton(() => dio);
-  // Logger
-  getIt.registerSingleton(talker);
   // Auth states manager
   getIt.registerSingleton(authManager);
 }

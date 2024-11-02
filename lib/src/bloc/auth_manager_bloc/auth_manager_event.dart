@@ -9,6 +9,12 @@ class Login extends AuthManagerEvent {
   final String password;
 }
 
+class RefreshToken extends AuthManagerEvent {
+  RefreshToken({required this.resfreshToken});
+
+  final String resfreshToken;
+}
+
 class Logout extends AuthManagerEvent {}
 
 class TryInitUser extends AuthManagerEvent {}

@@ -23,7 +23,7 @@ class VisualBottomSheet extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.85,
+                    maxHeight: MediaQuery.of(context).size.height * 0.9,
                   ),
                   child: ListView.builder(
                     itemCount: state.visualDiseses.length,
@@ -31,10 +31,11 @@ class VisualBottomSheet extends StatelessWidget {
                       final disease = state.visualDiseses[index];
                       return Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: theme.primaryColor),
+                          border:
+                              Border.all(color: theme.primaryColor, width: 2),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(20),
                         margin: const EdgeInsets.all(10),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -42,16 +43,16 @@ class VisualBottomSheet extends StatelessWidget {
                             Center(
                                 child: Text(
                               disease.name,
-                              style: theme.textTheme.titleLarge
-                                  ?.copyWith(color: Colors.black),
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                  color: theme.colorScheme.onSurface),
                             )),
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   'Вероятность',
-                                  style: theme.textTheme.bodyLarge
-                                      ?.copyWith(color: Colors.black),
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurface),
                                 ),
                                 Flexible(
                                     child:
@@ -63,8 +64,8 @@ class VisualBottomSheet extends StatelessWidget {
                               children: [
                                 Text(
                                   'Вердикт',
-                                  style: theme.textTheme.bodyLarge
-                                      ?.copyWith(color: Colors.black),
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurface),
                                 ),
                                 Flexible(child: Text(disease.verdict))
                               ],
@@ -74,8 +75,8 @@ class VisualBottomSheet extends StatelessWidget {
                               children: [
                                 Text(
                                   'Обратите внимание!',
-                                  style: theme.textTheme.bodyLarge
-                                      ?.copyWith(color: Colors.black),
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurface),
                                 ),
                                 Flexible(child: Text(disease.advice))
                               ],

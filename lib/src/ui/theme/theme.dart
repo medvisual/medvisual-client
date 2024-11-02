@@ -31,7 +31,7 @@ final lightTheme = ThemeData(
   canvasColor: const Color(0xFFF7FAFC),
   indicatorColor: Colors.red,
   brightness: Brightness.light,
-  primaryColor: primaryColor,
+  primaryColor: const Color(0xFF0D92F4),
   fontFamily: GoogleFonts.getFont('Unbounded').fontFamily,
   useMaterial3: true,
 );
@@ -59,7 +59,7 @@ final darkTheme = ThemeData(
   indicatorColor: Colors.red,
   brightness: Brightness.dark,
   useMaterial3: true,
-  primaryColor: primaryColor,
+  primaryColor: const Color(0xFF0D92F4),
   canvasColor: Colors.black,
   fontFamily: GoogleFonts.getFont('Unbounded').fontFamily,
 );

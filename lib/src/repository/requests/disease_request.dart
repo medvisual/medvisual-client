@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/repository/models/diseases_list/disease.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:medvisual/src/repository/tokenn_manager/token_manager.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class DiseaseRequest {
@@ -46,7 +47,10 @@ class DiseaseRequest {
             'No endpoint-api (https of backend) in your .env file, please check and retry');
       }
       final data = disease.toJson();
-      final response = await dio.post(endPoint, data: data);
+      final jwtToken = await TokenManager().getToken();
+      final response = await dio.post(endPoint,
+          data: data,
+          options: Options(headers: {'Authorization': 'Bearer $jwtToken'}));
       if (response.statusCode == 200 || response.statusCode == 201) {
         GetIt.I<Talker>().info('New disease successful added!');
       } else {

@@ -73,17 +73,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
               },
             );
           } else if (state is DiseasesListLoading) {
-            return ListView.builder(
-              // or this
-              // child: LoadingAnimationWidget.stretchedDots(
-              //   color: theme.primaryColor,
-              //   size: 60,
-              // ),
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return const ShimmerComtainer();
-              },
-            );
+            return const DiseasesLoadingWidget();
           } else {
             return SomethingWrongWidget(
               tryAgainCallback: () {

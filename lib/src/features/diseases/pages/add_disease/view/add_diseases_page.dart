@@ -30,6 +30,7 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Новая болезнь'),
@@ -48,81 +49,65 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...[
-                const Text('Название болезни'),
-                InputField(
-                  inputController: nameTextController,
-                  text: 'Напишите название болезни',
-                  maxLines: 1,
-                )
-              ],
+              const Text('Название болезни'),
+              InputField(
+                inputController: nameTextController,
+                text: 'Напишите название болезни',
+                maxLines: 1,
+              ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              ...[
-                const Text('Информация о болезни'),
-                InputField(
-                  inputController: detailsTextController,
-                  text: 'Заполните инфорамцию о болезни',
-                  maxLines: 10,
-                )
-              ],
+              const Text('Информация о болезни'),
+              InputField(
+                inputController: detailsTextController,
+                text: 'Заполните информацию о болезни',
+                maxLines: 10,
+              ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-              BlocBuilder<DiseasesBloc, DiseasesState>(
+              BlocListener<DiseasesBloc, DiseasesState>(
                 bloc: addDiseaseBloc,
-                builder: (context, state) {
-                  final theme = Theme.of(context);
+                listener: (context, state) {
                   if (state is AddDiseaseError) {
-                    // TODO: Change error ui to message, not button text
-                    return BaseButton(
-                      content: Text(
-                        'Ошибка',
-                        style: theme.textTheme.bodyLarge
-                            ?.copyWith(color: theme.canvasColor),
+                    showAdaptiveDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Ошибка'),
+                        content: const Text('Не удалось добавить болезнь.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text('ОК',
+                                style: TextStyle(
+                                    color: theme.colorScheme.onSurface)),
+                          ),
+                        ],
                       ),
-                      onPressed: () {
-                        addNewDisease(addDiseaseBloc, nameTextController,
-                            detailsTextController);
-                      },
-                      width: MediaQuery.of(context).size.width,
-                    );
-                  } else if (state is AddDiseaseInProgress) {
-                    return BaseButton(
-                        content: LoadingAnimationWidget.stretchedDots(
-                          color: theme.canvasColor,
-                          size: 25,
-                        ),
-                        onPressed: () {
-                          addNewDisease(addDiseaseBloc, nameTextController,
-                              detailsTextController);
-                        });
-                  } else {
-                    debugPrint(context.router.currentPath);
-                    // Success state
-                    return BaseButton(
-                      content: Text(
-                        'Добавить болезнь',
-                        style: theme.textTheme.bodyLarge
-                            ?.copyWith(color: theme.colorScheme.onSurface),
-                      ),
-                      onPressed: () {
-                        addNewDisease(addDiseaseBloc, nameTextController,
-                            detailsTextController);
-                      },
-                      width: MediaQuery.of(context).size.width,
                     );
                   }
                 },
+                child: BaseButton(
+                  onPressed: () {
+                    addNewDisease(addDiseaseBloc, nameTextController,
+                        detailsTextController);
+                  },
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  content: BlocBuilder<DiseasesBloc, DiseasesState>(
+                    bloc: addDiseaseBloc,
+                    builder: (context, state) {
+                      if (state is AddDiseaseInProgress) {
+                        return LoadingAnimationWidget.stretchedDots(
+                          color: theme.colorScheme.onSurface,
+                          size: 40,
+                        );
+                      } else {
+                        return Text(
+                          'Добавить болезнь',
+                          style: TextStyle(color: theme.colorScheme.onSurface),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
-              // FIXME: Working on stack navbar // DELETE
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // StackNavigationBar(
-              //     selectedIndex: 0,
-              //     onSelected: (_index) {
-              //       setState(() {
-              //         routerIndex = _index;
-              //       });
-              //     })
             ],
           ),
         ),

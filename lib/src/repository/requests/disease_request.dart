@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/repository/models/diseases_list/disease.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:medvisual/src/repository/tokenn_manager/token_manager.dart';
+import 'package:medvisual/src/repository/token_manager/token_manager.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class DiseaseRequest {

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:medvisual/src/repository/models/visual_disease_model/visual_disease_model.dart';
-import 'package:medvisual/src/repository/tokenn_manager/token_manager.dart';
+import 'package:medvisual/src/repository/token_manager/token_manager.dart';
 import 'package:mime/mime.dart';
 
 class VisualRequest {

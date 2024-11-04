@@ -17,13 +17,10 @@ class ImagePickerPage extends StatefulWidget {
 class _ImagePickerPageState extends State<ImagePickerPage> {
   final _visualInformationBloc = VisualInformationBloc();
   File? image;
-  bool showErrorChooseImage = false;
-
   // Function to update the image, passed to ImagePickerWidget
   void _updateImage(File newImage) {
     setState(() {
       image = newImage;
-      showErrorChooseImage = false;
     });
   }
 
@@ -52,20 +49,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                     _getVisualDiseases(image!);
                   }
                 : () {
-                    final snackBar = SnackBar(
-                      content: Wrap(
-                        children: [
-                          Center(
-                            child: Text(
-                              'Пожалуйста, выберите фото',
-                              style: TextStyle(color: theme.indicatorColor),
-                            ),
-                          )
-                        ],
-                      ),
-                      backgroundColor: theme.canvasColor,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    //TODO: Some logic for none selected image
                   },
             content: BlocBuilder<VisualInformationBloc, VisualInformationState>(
               bloc: _visualInformationBloc,

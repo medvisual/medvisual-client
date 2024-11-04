@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/features/visual/pages/visual_disease_page.dart';
 import 'package:medvisual/src/features/visual/pages/information_page.dart';
+import 'package:medvisual/src/ui/widgets/widgets.dart';
 
 class VisualScreen extends StatefulWidget {
   const VisualScreen({super.key, required this.disease});
@@ -11,62 +12,29 @@ class VisualScreen extends StatefulWidget {
 }
 
 class _VisualScreenState extends State<VisualScreen> {
-  int _currentPageIndex = 0;
-
-  void _setPage(int index) {
-    setState(() {
-      _currentPageIndex = index;
-    });
-  }
+  final controller = PageController();
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.disease),
+          title: FittedBox(fit: BoxFit.scaleDown, child: Text(widget.disease)),
           leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
               }),
           bottom: PreferredSize(
-            preferredSize: const Size(double.infinity, 60),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextButton(
-                  onPressed: () => _setPage(0),
-                  child: Text(
-                    'Информация',
-                    style: TextStyle(
-                      color: _currentPageIndex == 0
-                          ? theme.primaryColor
-                          : theme.hintColor.withOpacity(0.3),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _setPage(1),
-                  child: Text(
-                    'ИИ',
-                    style: TextStyle(
-                      color: _currentPageIndex == 1
-                          ? theme.primaryColor
-                          : theme.hintColor
-                              .withOpacity(0.3), // Подсветка активной кнопки
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+              preferredSize: const Size(double.infinity, 70),
+              child:
+                  CustomTabBarView(pageController: controller, categoryList: [
+                TabBarItem("Информация"),
+                TabBarItem("Создать Visual"),
+              ])),
         ),
-        body: Column(children: [
-          const SizedBox(height: 20),
-          _currentPageIndex == 0
-              ? const InformationPage()
-              : const ImagePickerPage(),
-        ]));
+        body: PageView(
+          controller: controller,
+          children: const [InformationPage(), ImagePickerPage()],
+        ));
   }
 }

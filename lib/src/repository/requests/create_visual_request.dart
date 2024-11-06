@@ -12,17 +12,21 @@ class VisualRequest {
   final Dio dio;
 
   // Request for getting an AI opinion about image
+
   Future<List<VisualDisease>> createVisualRequest(
       List<String> presumedDiseases, File image) async {
     try {
+      // Check for mimetype (jpg, jpeg, png, etc)
       String? mimeType = lookupMimeType(image.path);
       var formData = FormData.fromMap({
-        'presumedDiseases[]': presumedDiseases.join(', '), // Backend will get
+        'presumedDiseases[]': presumedDiseases, // Backend will get
         'image': await MultipartFile.fromFile(
           image.path,
           contentType: MediaType.parse(mimeType!),
         )
       });
+
+      // Get endpoint api
       final String endPoint;
       if (dotenv.env['ENDPOINT-API'] != null) {
         endPoint = '${dotenv.env['ENDPOINT-API']!}/api/visual/create';
@@ -30,7 +34,8 @@ class VisualRequest {
         throw Exception(
             'No endpoint-api (https of backend) in your enviroment, please check and retry');
       }
-      final jwtToken = await TokenManager().getToken();
+
+      final jwtToken = await TokenManager().getAccessToken();
       final response = await dio.post(
           // If no endpoint-api in .env throw exception about it
           endPoint,
@@ -49,7 +54,6 @@ class VisualRequest {
             'Status code is ${response.statusCode} and message: ${response.statusMessage}');
       }
     } catch (e) {
-      TokenManager().refreshToken();
       throw Exception('Failure fetching data from endpoint, error: $e');
     }
   }

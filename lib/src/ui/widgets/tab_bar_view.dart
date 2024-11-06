@@ -97,7 +97,7 @@ class CategoryCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: isSelected // Use the isSelected property here
-            ? theme.colorScheme.onSurface
+            ? theme.primaryColor
             : theme.colorScheme.surfaceContainer,
       ),
       child: FittedBox(
@@ -111,7 +111,7 @@ class CategoryCard extends StatelessWidget {
             category.title,
             style: TextStyle(
               color: isSelected // Use the isSelected property here
-                  ? theme.colorScheme.surface
+                  ? Colors.white
                   : theme.hintColor,
             ),
           ),

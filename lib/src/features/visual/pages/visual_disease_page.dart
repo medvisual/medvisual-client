@@ -1,11 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
-import 'package:medvisual/src/features/visual/widgets/image_picker_widget.dart';
-import 'package:medvisual/src/features/visual/widgets/visual_bottom_sheet.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:medvisual/src/ui/widgets/widgets.dart';
+import 'package:medvisual/src/features/visual/widgets/widgets.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key});
@@ -27,55 +23,25 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
 // Function for getting information from ai from backend
   void _getVisualDiseases(File image) {
     _visualInformationBloc.add(GetVisualDecision(
-        presumedDiseases: ['Цироз печени, Пневмония, Рак легких'],
-        image: image));
+        presumedDiseases: ['Пневмония, Туберкулез, Бронхит'], image: image));
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          // Passing callback to update the image
-          ImagePickerWidget(onImagePicked: _updateImage),
-          const SizedBox(height: 60),
-          BaseButton(
-            width: MediaQuery.of(context).size.width * 0.62,
-            onPressed: image != null
-                ? () {
-                    _getVisualDiseases(image!);
-                  }
-                : () {
-                    //TODO: Some logic for none selected image
-                  },
-            content: BlocBuilder<VisualInformationBloc, VisualInformationState>(
-              bloc: _visualInformationBloc,
-              builder: (context, state) {
-                if (state is VisualInformationLoading) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 40, vertical: 6),
-                    child: LoadingAnimationWidget.stretchedDots(
-                      color: theme.colorScheme.onSurface,
-                      size: 40,
-                    ),
-                  );
-                }
-                return FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    'Получить информацию',
-                    style: TextStyle(color: theme.colorScheme.onSurface),
-                  ),
-                );
-              },
-            ),
-          ),
-          VisualBottomSheet(visualInformationBloc: _visualInformationBloc),
-        ],
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            UploadImageContainer(
+                visualInformationBloc: _visualInformationBloc,
+                updateImage: _updateImage,
+                getVisualDiseases: _getVisualDiseases,
+                image: image),
+            // Passing callback to update the image
+            const AttentionVisualWidget(),
+            VisualBottomSheet(visualInformationBloc: _visualInformationBloc),
+          ],
+        ),
       ),
     );
   }

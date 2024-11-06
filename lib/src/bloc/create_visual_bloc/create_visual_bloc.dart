@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/repository/models/visual_disease_model/visual_disease_model.dart';
 import 'package:medvisual/src/repository/requests/create_visual_request.dart';
+import 'package:medvisual/src/repository/token_manager/token_manager.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 part 'create_visual_event.dart';
@@ -15,6 +16,11 @@ class VisualInformationBloc
     on<GetVisualDecision>((event, emit) async {
       emit(VisualInformationLoading());
       try {
+        // Check for token valid
+        final tokenManager = TokenManager();
+        if (await tokenManager.isRefreshNeded()) {
+          await tokenManager.refreshToken();
+        }
         final visualRequest = VisualRequest(dio: GetIt.I<Dio>());
         List<VisualDisease> visualDiseses = await visualRequest
             .createVisualRequest(event.presumedDiseases, event.image);

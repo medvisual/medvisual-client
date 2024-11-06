@@ -21,71 +21,91 @@ class VisualBottomSheet extends StatelessWidget {
               isScrollControlled: true,
               context: context,
               builder: (BuildContext context) {
-                return Container(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.9,
-                  ),
-                  child: ListView.builder(
-                    itemCount: state.visualDiseses.length,
-                    itemBuilder: (context, index) {
-                      final disease = state.visualDiseses[index];
-                      return Container(
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: theme.primaryColor, width: 2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.all(20),
-                        margin: const EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Center(
-                                child: Text(
-                              disease.name,
-                              style: theme.textTheme.titleLarge?.copyWith(
-                                  color: theme.colorScheme.onSurface),
-                            )),
-                            Column(
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppBar(
+                      leading: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      title: const Text('Результаты'),
+                      centerTitle: true, // Центрирует заголовок
+                    ),
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.87,
+                      ),
+                      child: ListView.builder(
+                        itemCount: state.visualDiseses.length,
+                        itemBuilder: (context, index) {
+                          final disease = state.visualDiseses[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: theme.primaryColor, width: 2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.all(20),
+                            margin: const EdgeInsets.all(10),
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  'Вероятность',
-                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                Center(
+                                    child: Text(
+                                  disease.name,
+                                  style: theme.textTheme.titleLarge?.copyWith(
                                       color: theme.colorScheme.onSurface),
+                                )),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Вероятность',
+                                      style: theme.textTheme.bodyLarge
+                                          ?.copyWith(
+                                              color:
+                                                  theme.colorScheme.onSurface),
+                                    ),
+                                    Flexible(
+                                        child: Text(
+                                            '${disease.probability * 100}%'))
+                                  ],
                                 ),
-                                Flexible(
-                                    child:
-                                        Text('${disease.probability * 100}%'))
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Вердикт',
+                                      style: theme.textTheme.bodyLarge
+                                          ?.copyWith(
+                                              color:
+                                                  theme.colorScheme.onSurface),
+                                    ),
+                                    Flexible(child: Text(disease.verdict))
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Обратите внимание!',
+                                      style: theme.textTheme.bodyLarge
+                                          ?.copyWith(
+                                              color:
+                                                  theme.colorScheme.onSurface),
+                                    ),
+                                    Flexible(child: Text(disease.advice))
+                                  ],
+                                ),
                               ],
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Вердикт',
-                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                      color: theme.colorScheme.onSurface),
-                                ),
-                                Flexible(child: Text(disease.verdict))
-                              ],
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Обратите внимание!',
-                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                      color: theme.colorScheme.onSurface),
-                                ),
-                                Flexible(child: Text(disease.advice))
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 );
               });
         }

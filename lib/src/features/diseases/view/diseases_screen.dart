@@ -24,20 +24,26 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
     super.initState();
   }
 
+  bool isModerator() {
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.router.push(const AddDiseaseRoute());
-        },
-        backgroundColor: theme.primaryColor,
-        child: Icon(
-          Icons.add,
-          color: theme.colorScheme.onSurface,
-        ),
-      ),
+      floatingActionButton: isModerator()
+          ? FloatingActionButton(
+              onPressed: () {
+                context.router.push(const AddDiseaseRoute());
+              },
+              backgroundColor: theme.primaryColor,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,

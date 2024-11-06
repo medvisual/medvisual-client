@@ -50,6 +50,9 @@ class AuthRequest {
         final data = response.data as Map<String, dynamic>;
         final AuthResponse authResponse = AuthResponse.fromJson(data);
         return authResponse;
+      } else if (response.statusCode == 401) {
+        throw Exception(
+            'Refresh auth problem, it could be because refresh token expired');
       } else {
         throw Exception(
             'Status code is ${response.statusCode} and message: ${response.statusMessage}');

@@ -30,7 +30,8 @@ void setupDependencies() async {
   final authManager = AuthManagerBloc();
 
   // Trying get user if it was logged.
-  authManager.add(TryInitUser());
+  secureStorage.deleteAll();
+  //authManager.add(TryInitUser());
 
   // Connect bloc and dio with Talker (logger)
   Bloc.observer = TalkerBlocObserver(talker: talker);

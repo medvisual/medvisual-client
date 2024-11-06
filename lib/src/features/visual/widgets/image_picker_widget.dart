@@ -38,8 +38,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         onTap: pickImage,
         child: Column(children: [
           Container(
-            height: 300,
-            width: 300,
+            height: 250,
+            width: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(

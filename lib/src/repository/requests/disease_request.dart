@@ -47,7 +47,7 @@ class DiseaseRequest {
             'No endpoint-api (https of backend) in your .env file, please check and retry');
       }
       final data = disease.toJson();
-      final jwtToken = await TokenManager().getToken();
+      final jwtToken = await TokenManager().getAccessToken();
       final response = await dio.post(endPoint,
           data: data,
           options: Options(headers: {'Authorization': 'Bearer $jwtToken'}));

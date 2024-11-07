@@ -73,9 +73,8 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
               itemCount: state.diseasesList.length,
               itemBuilder: (BuildContext context, int index) {
                 return DiseasesListContainer(
-                  index: index,
-                  name: state.diseasesList[index].name,
-                );
+                    name: state.diseasesList[index].name,
+                    id: state.diseasesList[index].id!);
               },
             );
           } else if (state is DiseasesListLoading) {

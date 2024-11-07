@@ -64,7 +64,7 @@ class TokenManager {
 
     try {
       final response = await authRequest.refreshAuth(await getRefreshToken());
-      refreshTokensStorage(response.accessToken, response.refreshToken);
+      await refreshTokensStorage(response.accessToken, response.refreshToken);
     } catch (e) {
       talker.error('Some problem while refreshing token: $e');
       throw Exception('Some problem while refreshing token: $e');

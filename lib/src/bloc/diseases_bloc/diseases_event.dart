@@ -14,3 +14,9 @@ class AddDisease extends DiseasesEvent {
   final String description;
   final String department;
 }
+
+class DeleteDisease extends DiseasesEvent {
+  DeleteDisease({required this.diseaseId});
+
+  final int diseaseId;
+}

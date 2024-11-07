@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/features/categories/widgets/search_widget.dart';
+import 'package:medvisual/src/ui/widgets/search_widget.dart';
 import 'package:medvisual/src/features/categories/widgets/settings_button.dart';
+import 'package:medvisual/src/router/router.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
@@ -26,9 +28,15 @@ class CustomAppBar extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       pinned: true,
       floating: true,
-      bottom: const PreferredSize(
-        preferredSize: Size(double.infinity, 70),
-        child: SearchWidget(),
+      bottom: PreferredSize(
+        preferredSize: const Size(double.infinity, 70),
+        child: GestureDetector(
+          child: const Hero(tag: 'search-widget', child: SearchWidget()),
+          onTap: () {
+            debugPrint('Search Widget was clicked');
+            AutoRouter.of(context).navigate(const SearchRoute());
+          },
+        ),
       ),
     );
   }

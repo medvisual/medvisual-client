@@ -7,6 +7,7 @@ import 'package:medvisual/src/features/diseases/view/diseases_screen.dart';
 import 'package:medvisual/src/features/home/view/home_screen.dart';
 import 'package:medvisual/src/features/auth/view/login_page.dart';
 import 'package:medvisual/src/features/profile/view/profile_screen.dart';
+import 'package:medvisual/src/features/search/view/search_screen.dart';
 import 'package:medvisual/src/features/settings/view/settings_screen.dart';
 import 'package:medvisual/src/router/auth_route_guard.dart';
 
@@ -22,12 +23,13 @@ class AppRouter extends RootStackRouter {
           AutoRoute(
               page: ProfileRoute.page, path: 'profile', guards: [AuthGuard()]),
         ]),
+        AutoRoute(page: SearchRoute.page, path: '/search'),
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
         AutoRoute(page: DiseasesRoute.page, path: '/diseases'),
         AutoRoute(
             page: AddDiseaseRoute.page,
             path: '/add_disease',
             guards: [AuthGuard()]),
-        AutoRoute(page: LoginRoute.page, path: '/login')
+        AutoRoute(page: LoginRoute.page, path: '/login'),
       ];
 }

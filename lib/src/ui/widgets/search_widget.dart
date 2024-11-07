@@ -25,13 +25,9 @@ class SearchWidget extends StatelessWidget {
             color: theme.hintColor.withOpacity(0.7),
           ),
           const SizedBox(width: 10),
-          Text(
-            'Поиск',
-            style: TextStyle(
-              color: theme.hintColor.withOpacity(0.7),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text('Поиск',
+              style: theme.textTheme.labelLarge
+                  ?.copyWith(color: theme.hintColor.withOpacity(0.7))),
         ],
       ),
     );

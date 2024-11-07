@@ -61,4 +61,28 @@ class DiseaseRequest {
       throw Exception('Exeption was occured: $e');
     }
   }
+
+  Future<void> deleteDisease(int diseaseId) async {
+    try {
+      final String endPoint;
+      await dotenv.load(fileName: ".env"); // loading file of enviroment
+      if (dotenv.env['ENDPOINT-API'] != null) {
+        endPoint = '${dotenv.env['ENDPOINT-API']!}/api/diseases/$diseaseId';
+      } else {
+        throw Exception(
+            'No endpoint-api (https of backend) in your .env file, please check and retry');
+      }
+      final jwtToken = await TokenManager().getAccessToken();
+      final response = await dio.delete(endPoint,
+          options: Options(headers: {'Authorization': 'Bearer $jwtToken'}));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        GetIt.I<Talker>().log('Disease successful added!');
+      } else {
+        throw Exception(
+            'Status code is ${response.statusCode} and message: ${response.statusMessage}');
+      }
+    } catch (e) {
+      throw Exception('Exeption was occured: $e');
+    }
+  }
 }

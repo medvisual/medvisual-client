@@ -42,5 +42,14 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
         emit(AddDiseaseError(error: e.toString()));
       }
     });
+
+    on<DeleteDisease>((event, emit) async {
+      try {
+        final diseaseRequest = DiseaseRequest(dio: GetIt.I<Dio>());
+        await diseaseRequest.deleteDisease(event.diseaseId);
+      } catch (e) {
+        throw Exception('Error was occured: $e');
+      }
+    });
   }
 }

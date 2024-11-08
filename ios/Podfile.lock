@@ -7,6 +7,8 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - realm (20.0.0):
+    - Flutter
   - share_plus (0.0.1):
     - Flutter
 
@@ -15,6 +17,7 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - realm (from `.symlinks/plugins/realm/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
 
 EXTERNAL SOURCES:
@@ -26,6 +29,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  realm:
+    :path: ".symlinks/plugins/realm/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
 
@@ -34,6 +39,7 @@ SPEC CHECKSUMS:
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  realm: c6c7f079d42235d81f52d32a634bd8fd3fdafd56
   share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796

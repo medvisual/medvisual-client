@@ -20,10 +20,14 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: HomeRoute.page, path: '/', children: [
           AutoRoute(page: CategoriesRoute.page, path: 'categories'),
           AutoRoute(page: ChatRoute.page, path: 'chats'),
-          AutoRoute(
-              page: ProfileRoute.page, path: 'profile', guards: [AuthGuard()]),
+          AutoRoute(page: ProfileRoute.page, path: 'profile'),
         ]),
-        AutoRoute(page: SearchRoute.page, path: '/search'),
+        CustomRoute(
+            page: SearchRoute.page,
+            path: '/search',
+            transitionsBuilder: TransitionsBuilders.slideTop,
+            durationInMilliseconds: 300,
+            opaque: true),
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
         AutoRoute(page: DiseasesRoute.page, path: '/diseases'),
         AutoRoute(

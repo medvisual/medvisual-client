@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:medvisual/src/repository/realm/realm_models/disease_realm.dart';
 
 part 'disease.g.dart';
 
@@ -14,6 +15,13 @@ class Disease {
   final String name;
   final String description;
   final String department;
+
+  RealmDisease toRealm() => RealmDisease(id!, name, description, department);
+  static Disease fromRealm(RealmDisease realmDisease) => Disease(
+      id: realmDisease.id,
+      name: realmDisease.name,
+      description: realmDisease.description,
+      department: realmDisease.department);
 
   /// Connect the generated [_$DiseaseFromJson] function to the `fromJson`
   /// factory.

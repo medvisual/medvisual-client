@@ -22,8 +22,8 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
 
 // Function for getting information from ai from backend
   void _getVisualDiseases(File image) {
-    _visualInformationBloc.add(GetVisualDecision(
-        presumedDiseases: ['Пневмония, Туберкулез, Бронхит'], image: image));
+    _visualInformationBloc.add(
+        GetVisualDecision(presumedDiseases: ['Герпес, Хейлит'], image: image));
   }
 
   @override

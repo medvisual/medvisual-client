@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/bloc/auth_manager_bloc/auth_manager_bloc.dart';
+import 'package:medvisual/src/repository/realm/realm_models/disease_realm.dart';
+import 'package:realm/realm.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
@@ -13,6 +15,10 @@ final getIt = GetIt.instance;
 
 void setupDependencies() async {
   await dotenv.load(fileName: ".env"); // loading file of enviroment
+
+  // Create and init local db (Realm)
+  final config = Configuration.local([RealmDisease.schema]);
+  final realm = Realm(config);
 
   // Firts init secure storage for trying init users
   const secureStorage = FlutterSecureStorage();
@@ -42,4 +48,5 @@ void setupDependencies() async {
   ));
   // Auth states manager
   getIt.registerSingleton(authManager);
+  getIt.registerSingleton(realm);
 }

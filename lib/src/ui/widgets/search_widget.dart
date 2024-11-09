@@ -4,8 +4,14 @@ class SearchWidget extends StatelessWidget {
   const SearchWidget({
     super.key,
     this.radius,
+    this.height,
+    this.inset,
+    required this.child,
   });
   final double? radius;
+  final double? height;
+  final double? inset;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,7 @@ class SearchWidget extends StatelessWidget {
       margin: const EdgeInsets.all(15),
       padding: const EdgeInsets.symmetric(horizontal: 15),
       width: double.infinity,
-      height: 40,
+      height: height ?? 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius ?? 30),
         color: theme.colorScheme.surfaceContainer,
@@ -26,10 +32,8 @@ class SearchWidget extends StatelessWidget {
             Icons.search,
             color: theme.hintColor.withOpacity(0.7),
           ),
-          const SizedBox(width: 10),
-          Text('Поиск',
-              style: theme.textTheme.labelLarge
-                  ?.copyWith(color: theme.hintColor.withOpacity(0.7))),
+          SizedBox(width: inset ?? 10),
+          child
         ],
       ),
     );

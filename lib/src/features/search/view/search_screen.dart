@@ -8,14 +8,26 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(),
-      body: const Align(
-          alignment: Alignment.center,
+      body: Align(
+          alignment: Alignment.topCenter,
           child: Hero(
               tag: 'search-widget',
-              child: SearchWidget(
-                radius: 20,
+              child: Material(
+                type: MaterialType.transparency,
+                child: SearchWidget(
+                  radius: 10,
+                  height: 50,
+                  inset: 0,
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: TextField(
+                        autofocus: true,
+                        cursorColor: theme.primaryColor,
+                      )),
+                ),
               ))),
     );
   }

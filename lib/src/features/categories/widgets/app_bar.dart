@@ -31,7 +31,13 @@ class CustomAppBar extends StatelessWidget {
       bottom: PreferredSize(
         preferredSize: const Size(double.infinity, 70),
         child: GestureDetector(
-          child: const Hero(tag: 'search-widget', child: SearchWidget()),
+          child: Hero(
+              tag: 'search-widget',
+              child: SearchWidget(
+                child: Text('Поиск',
+                    style: theme.textTheme.labelLarge
+                        ?.copyWith(color: theme.hintColor.withOpacity(0.7))),
+              )),
           onTap: () {
             debugPrint('Search Widget was clicked');
             AutoRouter.of(context).navigate(const SearchRoute());

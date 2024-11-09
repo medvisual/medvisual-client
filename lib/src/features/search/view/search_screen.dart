@@ -10,8 +10,13 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: const Center(
-          child: Hero(tag: 'search-widget', child: SearchWidget())),
+      body: const Align(
+          alignment: Alignment.center,
+          child: Hero(
+              tag: 'search-widget',
+              child: SearchWidget(
+                radius: 20,
+              ))),
     );
   }
 }

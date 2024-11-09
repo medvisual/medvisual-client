@@ -17,23 +17,45 @@ part 'router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: HomeRoute.page, path: '/', children: [
-          AutoRoute(page: CategoriesRoute.page, path: 'categories'),
-          AutoRoute(page: ChatRoute.page, path: 'chats'),
-          AutoRoute(page: ProfileRoute.page, path: 'profile'),
-        ]),
         CustomRoute(
-            page: SearchRoute.page,
-            path: '/search',
-            transitionsBuilder: TransitionsBuilders.slideTop,
-            durationInMilliseconds: 300,
-            opaque: true),
+            page: HomeRoute.page,
+            path: '/',
+            children: [
+              AutoRoute(page: CategoriesRoute.page, path: 'categories'),
+              AutoRoute(page: ChatRoute.page, path: 'chats'),
+              AutoRoute(page: ProfileRoute.page, path: 'profile'),
+            ],
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              // For HomeRoute, we can control the secondary animation (previous screen)
+              final fadeOut = Tween<double>(begin: 1.0, end: 0.0)
+                  .animate(secondaryAnimation);
+              return FadeTransition(opacity: fadeOut, child: child);
+            }),
+
+        // Custom Route for Search with Slide transition from top
+        CustomRoute(
+          page: SearchRoute.page,
+          path: '/search',
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final slideIn = Tween<Offset>(
+              begin: const Offset(0, -1), // Coming from the top
+              end: Offset.zero, // Ends at the original position
+            ).animate(animation);
+
+            return SlideTransition(position: slideIn, child: child);
+          },
+          durationInMilliseconds: 300,
+          opaque: true,
+        ),
+
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
         AutoRoute(page: DiseasesRoute.page, path: '/diseases'),
         AutoRoute(
-            page: AddDiseaseRoute.page,
-            path: '/add_disease',
-            guards: [AuthGuard()]),
+          page: AddDiseaseRoute.page,
+          path: '/add_disease',
+          guards: [AuthGuard()],
+        ),
         AutoRoute(page: LoginRoute.page, path: '/login'),
       ];
 }

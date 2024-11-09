@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class SearchWidget extends StatelessWidget {
   const SearchWidget({
     super.key,
+    this.radius,
   });
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class SearchWidget extends StatelessWidget {
       width: double.infinity,
       height: 40,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(radius ?? 30),
         color: theme.colorScheme.surfaceContainer,
       ),
       child: Row(

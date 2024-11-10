@@ -72,5 +72,21 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
         throw Exception('Error was occured: $e');
       }
     });
+
+    on<SearchDisease>((event, emit) async {
+      try {
+        emit(SearchInProgress());
+        final realmDiseaseList =
+            await diseaseRepository.findDiseases(event.query);
+        final diseaseList = realmDiseaseList.map((e) {
+          return Disease.fromRealm(e);
+        }).toList();
+        emit(SearchCompleted(diseasesList: diseaseList));
+      } catch (e) {
+        talker.error(e);
+        emit(SearchError(error: e.toString()));
+        throw Exception('Error was occured: $e');
+      }
+    });
   }
 }

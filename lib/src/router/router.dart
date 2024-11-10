@@ -18,34 +18,33 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         CustomRoute(
-            page: HomeRoute.page,
-            path: '/',
-            children: [
-              AutoRoute(page: CategoriesRoute.page, path: 'categories'),
-              AutoRoute(page: ChatRoute.page, path: 'chats'),
-              AutoRoute(page: ProfileRoute.page, path: 'profile'),
-            ],
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              // For HomeRoute, we can control the secondary animation (previous screen)
-              final fadeOut = Tween<double>(begin: 1.0, end: 0.0)
-                  .animate(secondaryAnimation);
-              return FadeTransition(opacity: fadeOut, child: child);
-            }),
+          page: HomeRoute.page,
+          path: '/',
+          children: [
+            AutoRoute(page: CategoriesRoute.page, path: 'categories'),
+            AutoRoute(page: ChatRoute.page, path: 'chats'),
+            AutoRoute(page: ProfileRoute.page, path: 'profile'),
+          ],
+          // transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          //   // For HomeRoute, we can control the secondary animation (previous screen)
+          //   final fadeOut =
+          //       Tween<double>(begin: 1, end: 0).animate(secondaryAnimation);
+          //   return FadeTransition(opacity: fadeOut, child: child);
+          // },
+          // opaque: true,
+        ),
 
         // Custom Route for Search with Slide transition from top
         CustomRoute(
           page: SearchRoute.page,
           path: '/search',
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            final slideIn = Tween<Offset>(
-              begin: const Offset(0, -1), // Coming from the top
-              end: Offset.zero, // Ends at the original position
-            ).animate(animation);
-
-            return SlideTransition(position: slideIn, child: child);
+            final fadeOut = Tween<Offset>(
+                    begin: const Offset(0, 1), end: const Offset(0, 0))
+                .animate(animation);
+            return SlideTransition(position: fadeOut, child: child);
           },
-          durationInMilliseconds: 300,
+          durationInMilliseconds: 200,
           opaque: true,
         ),
 

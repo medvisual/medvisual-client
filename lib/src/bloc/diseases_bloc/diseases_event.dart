@@ -20,3 +20,9 @@ class DeleteDisease extends DiseasesEvent {
 
   final int diseaseId;
 }
+
+class SearchDisease extends DiseasesEvent {
+  SearchDisease({required this.query});
+
+  final String query;
+}

@@ -27,3 +27,17 @@ class AddDiseaseError extends DiseasesState {
 class AddDiseaseInProgress extends DiseasesState {}
 
 class AddDiseaseComplete extends DiseasesState {}
+
+class SearchInProgress extends DiseasesState {}
+
+class SearchCompleted extends DiseasesState {
+  SearchCompleted({required this.diseasesList});
+
+  final List<Disease> diseasesList;
+}
+
+class SearchError extends DiseasesState {
+  SearchError({required this.error});
+
+  final String error;
+}

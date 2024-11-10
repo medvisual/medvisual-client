@@ -24,4 +24,13 @@ class DiseaseRepository implements DiseaseRepositoryInterface {
       realm.addAll(diseases, update: true);
     });
   }
+
+  Future<List<RealmDisease>> findDiseases(String query) async {
+    final allDiseases = realm.all<RealmDisease>().toList();
+    final sortedDiseases = allDiseases
+        .where((disease) =>
+            disease.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    return sortedDiseases;
+  }
 }

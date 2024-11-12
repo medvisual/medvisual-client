@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:medvisual/src/repository/models/diseases_list/disease.dart';
-import 'package:medvisual/src/repository/realm/realm_repository/disease_repository.dart';
-import 'package:medvisual/src/repository/requests/disease_request.dart';
+import 'package:medvisual/src/data/models/diseases_list/disease.dart';
+import 'package:medvisual/src/data/repository/realm/realm_repository/disease_repository.dart';
+import 'package:medvisual/src/data/repository/requests/disease_request.dart';
 import 'package:realm/realm.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 

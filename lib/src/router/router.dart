@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/features/categories/view/categories_screen.dart';
-import 'package:medvisual/src/features/chats/view/chat_screen.dart';
-import 'package:medvisual/src/features/diseases/pages/add_disease/view/add_diseases_page.dart';
-import 'package:medvisual/src/features/diseases/view/diseases_screen.dart';
-import 'package:medvisual/src/features/home/view/home_screen.dart';
-import 'package:medvisual/src/features/auth/view/login_page.dart';
-import 'package:medvisual/src/features/profile/view/profile_screen.dart';
-import 'package:medvisual/src/features/search/view/search_screen.dart';
-import 'package:medvisual/src/features/settings/view/settings_screen.dart';
+import 'package:medvisual/src/presentation/pages/categories/view/categories_screen.dart';
+import 'package:medvisual/src/presentation/pages/chats/view/chat_screen.dart';
+import 'package:medvisual/src/presentation/pages/diseases/pages/add_disease/view/add_diseases_page.dart';
+import 'package:medvisual/src/presentation/pages/diseases/view/diseases_screen.dart';
+import 'package:medvisual/src/presentation/pages/home/view/home_screen.dart';
+import 'package:medvisual/src/presentation/pages/auth/view/login_page.dart';
+import 'package:medvisual/src/presentation/pages/profile/view/profile_screen.dart';
+import 'package:medvisual/src/presentation/pages/search/view/search_screen.dart';
+import 'package:medvisual/src/presentation/pages/settings/view/settings_screen.dart';
 import 'package:medvisual/src/router/auth_route_guard.dart';
 
 part 'router.gr.dart';
@@ -49,7 +49,25 @@ class AppRouter extends RootStackRouter {
         ),
 
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
-        AutoRoute(page: DiseasesRoute.page, path: '/diseases'),
+        CustomRoute(
+          page: DiseasesRoute.page,
+          path: '/diseases',
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            // Animation for the new route
+            final fadeIn = Tween<double>(begin: 0, end: 1).animate(animation);
+            // Animation for the secondary route (previous screen)
+            final fadeOut =
+                Tween<double>(begin: 1, end: 0).animate(secondaryAnimation);
+            return FadeTransition(
+              opacity: fadeIn,
+              child: FadeTransition(
+                opacity: fadeOut,
+                child: child,
+              ),
+            );
+          },
+          durationInMilliseconds: 200,
+        ),
         AutoRoute(
           page: AddDiseaseRoute.page,
           path: '/add_disease',

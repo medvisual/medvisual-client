@@ -11,10 +11,17 @@ part of 'router.dart';
 
 /// generated route for
 /// [AddDiseasePage]
-class AddDiseaseRoute extends PageRouteInfo<void> {
-  const AddDiseaseRoute({List<PageRouteInfo>? children})
-      : super(
+class AddDiseaseRoute extends PageRouteInfo<AddDiseaseRouteArgs> {
+  AddDiseaseRoute({
+    Key? key,
+    required void Function() onResult,
+    List<PageRouteInfo>? children,
+  }) : super(
           AddDiseaseRoute.name,
+          args: AddDiseaseRouteArgs(
+            key: key,
+            onResult: onResult,
+          ),
           initialChildren: children,
         );
 
@@ -23,9 +30,29 @@ class AddDiseaseRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const AddDiseasePage();
+      final args = data.argsAs<AddDiseaseRouteArgs>();
+      return AddDiseasePage(
+        key: args.key,
+        onResult: args.onResult,
+      );
     },
   );
+}
+
+class AddDiseaseRouteArgs {
+  const AddDiseaseRouteArgs({
+    this.key,
+    required this.onResult,
+  });
+
+  final Key? key;
+
+  final void Function() onResult;
+
+  @override
+  String toString() {
+    return 'AddDiseaseRouteArgs{key: $key, onResult: $onResult}';
+  }
 }
 
 /// generated route for

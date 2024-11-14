@@ -35,7 +35,9 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
       floatingActionButton: _isModerator()
           ? FloatingActionButton(
               onPressed: () {
-                context.router.push(const AddDiseaseRoute());
+                context.router.push(AddDiseaseRoute(onResult: () {
+                  _diseasesListBloc.add(GetDiseasesList());
+                }));
               },
               backgroundColor: theme.primaryColor,
               child: const Icon(
@@ -75,8 +77,9 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
               itemCount: state.diseasesList.length,
               itemBuilder: (BuildContext context, int index) {
                 return DiseasesListContainer(
-                    name: state.diseasesList[index].name,
-                    id: state.diseasesList[index].id!);
+                  name: state.diseasesList[index].name,
+                  id: state.diseasesList[index].id!,
+                );
               },
             );
           } else if (state is DiseasesListLoading) {

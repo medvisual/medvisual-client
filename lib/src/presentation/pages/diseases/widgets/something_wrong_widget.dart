@@ -31,13 +31,17 @@ class SomethingWrongWidget extends StatelessWidget {
           const SizedBox(height: 20),
           BaseButton(
             onPressed: tryAgainCallback,
-            content: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text('Попробовать снова',
-                  style: TextStyle(
-                      color: theme.colorScheme.onSurface, fontSize: 15)),
-            ),
             width: MediaQuery.of(context).size.width * 0.6,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                'Попробовать снова',
+                style: TextStyle(
+                  color: theme.colorScheme.onSurface,
+                  fontSize: 15,
+                ),
+              ),
+            ),
           )
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/presentation/pages/categories/categories.dart';
-import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/diseases_list_container.dart';
 
 @RoutePage()
 class SearchScreen extends StatefulWidget {
@@ -79,8 +79,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     return ListView.builder(
                       itemCount: state.diseasesList.length,
                       itemBuilder: (context, index) {
-                        return BaseListContainer(
-                          text: state.diseasesList[index].name,
+                        return DiseasesListContainer(
+                          name: state.diseasesList[index].name,
+                          id: state.diseasesList[index].id!,
                         );
                       },
                     );
@@ -88,8 +89,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     return ListView.builder(
                       itemCount: state.diseasesList.length,
                       itemBuilder: (context, index) {
-                        return BaseListContainer(
-                          text: state.diseasesList[index].name,
+                        return DiseasesListContainer(
+                          name: state.diseasesList[index].name,
+                          id: state.diseasesList[index].id!,
                         );
                       },
                     );

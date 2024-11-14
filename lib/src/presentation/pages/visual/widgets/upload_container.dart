@@ -37,7 +37,7 @@ class UploadImageContainer extends StatelessWidget {
                 : () {
                     //TODO: Some logic for none selected image
                   },
-            content: BlocBuilder<VisualInformationBloc, VisualInformationState>(
+            child: BlocBuilder<VisualInformationBloc, VisualInformationState>(
               bloc: visualInformationBloc,
               builder: (context, state) {
                 if (state is VisualInformationLoading) {

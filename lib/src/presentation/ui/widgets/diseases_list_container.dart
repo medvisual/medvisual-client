@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/presentation/pages/visual/view/visual_screen.dart';
 
 class DiseasesListContainer extends StatelessWidget {
@@ -13,7 +12,6 @@ class DiseasesListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DiseasesBloc diseasesBloc = DiseasesBloc();
     final theme = Theme.of(context);
     return GestureDetector(
       child: Container(
@@ -26,12 +24,6 @@ class DiseasesListContainer extends StatelessWidget {
               style: theme.textTheme.bodyMedium
                   ?.copyWith(color: theme.colorScheme.onSurface),
             ),
-            InkWell(
-              child: const Icon(Icons.delete_forever),
-              onTap: () {
-                diseasesBloc.add(DeleteDisease(diseaseId: id));
-              },
-            )
           ],
         ),
       ),
@@ -39,7 +31,8 @@ class DiseasesListContainer extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => VisualScreen(disease: name)));
+                builder: (context) =>
+                    VisualScreen(disease: name, diseaseId: id)));
       },
     );
   }

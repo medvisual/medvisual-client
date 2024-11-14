@@ -49,24 +49,9 @@ class AppRouter extends RootStackRouter {
         ),
 
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
-        CustomRoute(
+        AutoRoute(
           page: DiseasesRoute.page,
           path: '/diseases',
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            // Animation for the new route
-            final fadeIn = Tween<double>(begin: 0, end: 1).animate(animation);
-            // Animation for the secondary route (previous screen)
-            final fadeOut =
-                Tween<double>(begin: 1, end: 0).animate(secondaryAnimation);
-            return FadeTransition(
-              opacity: fadeIn,
-              child: FadeTransition(
-                opacity: fadeOut,
-                child: child,
-              ),
-            );
-          },
-          durationInMilliseconds: 200,
         ),
         AutoRoute(
           page: AddDiseaseRoute.page,

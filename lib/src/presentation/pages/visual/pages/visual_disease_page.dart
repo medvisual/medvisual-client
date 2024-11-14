@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/presentation/pages/visual/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 
 class ImagePickerPage extends StatefulWidget {
   const ImagePickerPage({super.key, required this.disease});
@@ -9,10 +10,10 @@ class ImagePickerPage extends StatefulWidget {
   final String disease;
 
   @override
-  _ImagePickerPageState createState() => _ImagePickerPageState();
+  ImagePickerPageState createState() => ImagePickerPageState();
 }
 
-class _ImagePickerPageState extends State<ImagePickerPage> {
+class ImagePickerPageState extends State<ImagePickerPage> {
   final _visualInformationBloc = VisualInformationBloc();
   File? image;
   // Function to update the image, passed to ImagePickerWidget
@@ -39,12 +40,33 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                 updateImage: _updateImage,
                 getVisualDiseases: _getVisualDiseases,
                 image: image),
-            // Passing callback to update the image
+            const OptinalDiseasesContainer(),
             const AttentionVisualWidget(),
             VisualBottomSheet(visualInformationBloc: _visualInformationBloc),
           ],
         ),
       ),
     );
+  }
+}
+
+class OptinalDiseasesContainer extends StatelessWidget {
+  const OptinalDiseasesContainer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseContainer(
+        child: Column(
+      children: [
+        const Text('Добавить дополнительные болезни для сравнения'),
+        const SizedBox(height: 20),
+        BaseButton(
+          onPressed: () {},
+          text: 'Добавить',
+        )
+      ],
+    ));
   }
 }

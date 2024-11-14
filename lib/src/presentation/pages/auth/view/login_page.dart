@@ -80,7 +80,7 @@ class LoginPage extends StatelessWidget {
                         email: emailController.text,
                         password: passwordController.text));
                   },
-                  content: const Text(
+                  child: const Text(
                     'Войти',
                     style: TextStyle(color: Colors.white),
                   )),

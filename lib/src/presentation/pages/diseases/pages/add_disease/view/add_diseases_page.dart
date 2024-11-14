@@ -8,7 +8,8 @@ import 'package:medvisual/src/presentation/ui/widgets/base_button.dart';
 
 @RoutePage()
 class AddDiseasePage extends StatefulWidget {
-  const AddDiseasePage({super.key});
+  const AddDiseasePage({super.key, required this.onResult});
+  final void Function() onResult;
 
   @override
   State<AddDiseasePage> createState() => _AddDiseasePageState();
@@ -88,11 +89,15 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
                   onPressed: () {
                     addNewDisease(addDiseaseBloc, nameTextController,
                         detailsTextController);
+                    widget.onResult();
                   },
                   width: MediaQuery.of(context).size.width * 0.9,
-                  content: BlocBuilder<DiseasesBloc, DiseasesState>(
+                  child: BlocBuilder<DiseasesBloc, DiseasesState>(
                     bloc: addDiseaseBloc,
                     builder: (context, state) {
+                      if (state is AddDiseaseComplete) {
+                        context.router.popForced();
+                      }
                       if (state is AddDiseaseInProgress) {
                         return LoadingAnimationWidget.stretchedDots(
                           color: theme.colorScheme.onSurface,

@@ -16,42 +16,46 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 final getIt = GetIt.instance;
 
 void setupDependencies() async {
-  await dotenv.load(fileName: ".env"); // loading file of enviroment
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
 
-  // Create and init local db (Realm)
+  // Initialize local database (Realm)
   final config = Configuration.local([RealmDisease.schema]);
   final realm = Realm(config);
 
-  // Firts init secure storage for trying init users
+  // Initialize secure storage
   const secureStorage = FlutterSecureStorage();
-  // Create instances
-  final talker = TalkerFlutter.init();
-  final dio = Dio();
-  // Secure storage
   getIt.registerSingleton(secureStorage);
 
-  // Request and dio init
-  getIt.registerLazySingleton(() => dio);
-  // Logger
+  // Initialize logger
+  final talker = TalkerFlutter.init();
   getIt.registerSingleton(talker);
 
+  // Initialize Dio for HTTP requests
+  final dio = Dio();
+  getIt.registerLazySingleton(() => dio);
+
+  // Initialize AuthManagerBloc
   final authManager = AuthManagerBloc();
+  getIt.registerSingleton(authManager);
 
-  // Trying get user if it was logged.
-  //authManager.add(TryInitUser());
+  // Attempt to initialize user if previously logged in
+  authManager.add(TryInitUser());
 
-  // Connect bloc and dio with Talker (logger)
+  // Set up Bloc observer with logger
   Bloc.observer = TalkerBlocObserver(talker: talker);
+
+  // Add interceptors to Dio
   dio.interceptors.addAll([
-    UpdateTokenInterceptor(tokenManager: TokenManager()),
+    UpdateTokenInterceptor(tokenManager: TokenManager()), // Token management
     TalkerDioLogger(
       talker: talker,
       settings: const TalkerDioLoggerSettings(
-        printResponseData: false,
+        printResponseData: false, // Do not print response data
       ),
-    )
+    ),
   ]);
-  // Auth states manager
-  getIt.registerSingleton(authManager);
+
+  // Register Realm instance
   getIt.registerSingleton(realm);
 }

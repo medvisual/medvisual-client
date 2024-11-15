@@ -44,5 +44,9 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, AuthManagerState> {
     on<Logout>((event, emit) async {
       emit(AuthNone());
     });
+
+    on<TokenExpired>((event, emit) async {
+      emit(Expired());
+    });
   }
 }

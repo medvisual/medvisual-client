@@ -7,14 +7,14 @@ import 'package:medvisual/src/presentation/ui/widgets/inut_field.dart';
 import 'package:medvisual/src/presentation/ui/widgets/base_button.dart';
 
 @RoutePage()
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key, required this.onResult, required this.onRegistration});
+class RegistrationPage extends StatelessWidget {
+  RegistrationPage({super.key, required this.onResult});
   final VoidCallback onResult;
-  final VoidCallback onRegistration;
 
   final bloc = GetIt.I<AuthManagerBloc>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final password2Controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
           Navigator.pop(context);
           onResult();
         } else {
-          Navigator.pop(context);
+          throw Exception('Failed auth');
         }
       },
       bloc: bloc,
@@ -65,36 +65,28 @@ class LoginPage extends StatelessWidget {
                   inputController: passwordController,
                   text: 'Пароль',
                   maxLines: 1),
-              const SizedBox(height: 10),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Забыли пароль?',
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.colorScheme.onSecondary),
-                  )),
+              InputField(
+                  obscureText: true,
+                  inputController: password2Controller,
+                  text: 'Повторите пароль',
+                  maxLines: 1),
               const SizedBox(height: 30),
               BaseButton(
-                  // Example of realization
+                  // TODO: add registration logic
                   onPressed: () async {
                     bloc.add(Login(
                         email: emailController.text,
                         password: passwordController.text));
                   },
                   child: const Text(
-                    'Войти',
+                    'Зарегистрироваться',
                     style: TextStyle(color: Colors.white),
                   )),
               const SizedBox(height: 20),
-              TextButton(
-                child: Text(
-                  'Нету аккаунта? Зарегистрируйся!',
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  onRegistration();
-                },
+              Text(
+                'Уже есть аккаунт? Войдите!',
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               )
             ],
           ),

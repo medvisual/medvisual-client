@@ -36,7 +36,7 @@ class MainCategoryWidget extends StatelessWidget {
             final categoryIcon = categories.values.toList()[index];
             return BaseListContainer(
               text: categoryName,
-              icon: 'assets/icons/$categoryIcon.svg',
+              icon: 'assets/icons/$categoryIcon.png',
               onTap: () {
                 context.router.push(DiseasesRoute(category: categoryName));
               },

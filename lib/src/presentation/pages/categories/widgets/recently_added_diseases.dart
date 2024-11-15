@@ -29,7 +29,7 @@ class RecentlyAddedDiseases extends StatelessWidget {
             itemBuilder: (context, index) {
               return BaseListContainer(
                 icon:
-                    'assets/icons/${categories.values.toList()[Random().nextInt(categories.length)]}.svg',
+                    'assets/icons/${categories.values.toList()[Random().nextInt(categories.length)]}.png',
                 text: 'Болезнь $index',
                 width: 200,
               );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class BaseListContainer extends StatelessWidget {
   const BaseListContainer({
@@ -37,12 +36,11 @@ class BaseListContainer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               icon != null
-                  ? SvgPicture.asset(
+                  ? Image.asset(
                       icon!,
                       height: 40,
                       width: 40,
-                      colorFilter: ColorFilter.mode(
-                          theme.colorScheme.onSurface, BlendMode.srcIn),
+                      color: Colors.white,
                     )
                   : const SizedBox.shrink(),
               FittedBox(
@@ -52,7 +50,7 @@ class BaseListContainer extends StatelessWidget {
                   style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
-                      color: theme.colorScheme.onSurface),
+                      color: Colors.white),
                 ),
               ),
             ]),

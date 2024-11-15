@@ -10,7 +10,7 @@ class AuthGuard extends AutoRouteGuard {
     final authManager = GetIt.I<AuthManagerBloc>();
     if (authManager.state is Authenticated) {
       resolver.next();
-    } else if (authManager.state is AuthNone) {
+    } else if (authManager.state is AuthNone || authManager.state is Expired) {
       showModalBottomSheet(
         context: router.navigatorKey.currentContext!,
         isScrollControlled: true,
@@ -21,6 +21,24 @@ class AuthGuard extends AutoRouteGuard {
               onResult: () {
                 Navigator.pop(context);
                 resolver.next();
+              },
+              onRegistration: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.93,
+                      child: RegistrationPage(
+                        onResult: () {
+                          Navigator.pop(context);
+                          resolver.next();
+                        },
+                      ),
+                    );
+                  },
+                );
               },
             ),
           );

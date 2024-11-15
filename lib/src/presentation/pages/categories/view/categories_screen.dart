@@ -11,11 +11,11 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, String> categories = {
-      'Неврология': 'brain',
-      'Ортопедия': 'bone',
-      'Педиатрия': 'bear',
-      'Офтальмология': 'eye',
-      'Психиатрия': 'butterfly',
+      'Онкология': 'oncology',
+      'Рентгенология': 'radiology',
+      'Кардиология': 'cardiology',
+      'Ортопедия': 'orthopedics',
+      'Пульмонология': 'pulmonology',
       'Другие': 'other'
     };
     return CustomScrollView(slivers: [

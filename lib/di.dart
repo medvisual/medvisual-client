@@ -15,7 +15,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final getIt = GetIt.instance;
 
-void setupDependencies() async {
+Future<void> setupDependencies() async {
   // Load environment variables
   await dotenv.load(fileName: ".env");
 

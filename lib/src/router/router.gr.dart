@@ -99,12 +99,14 @@ class DiseasesRoute extends PageRouteInfo<DiseasesRouteArgs> {
   DiseasesRoute({
     Key? key,
     required String category,
+    bool showCheckboxes = false,
     List<PageRouteInfo>? children,
   }) : super(
           DiseasesRoute.name,
           args: DiseasesRouteArgs(
             key: key,
             category: category,
+            showCheckboxes: showCheckboxes,
           ),
           initialChildren: children,
         );
@@ -118,6 +120,7 @@ class DiseasesRoute extends PageRouteInfo<DiseasesRouteArgs> {
       return DiseasesScreen(
         key: args.key,
         category: args.category,
+        showCheckboxes: args.showCheckboxes,
       );
     },
   );
@@ -127,15 +130,18 @@ class DiseasesRouteArgs {
   const DiseasesRouteArgs({
     this.key,
     required this.category,
+    this.showCheckboxes = false,
   });
 
   final Key? key;
 
   final String category;
 
+  final bool showCheckboxes;
+
   @override
   String toString() {
-    return 'DiseasesRouteArgs{key: $key, category: $category}';
+    return 'DiseasesRouteArgs{key: $key, category: $category, showCheckboxes: $showCheckboxes}';
   }
 }
 
@@ -164,12 +170,14 @@ class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
   LoginRoute({
     Key? key,
     required VoidCallback onResult,
+    required VoidCallback onRegistration,
     List<PageRouteInfo>? children,
   }) : super(
           LoginRoute.name,
           args: LoginRouteArgs(
             key: key,
             onResult: onResult,
+            onRegistration: onRegistration,
           ),
           initialChildren: children,
         );
@@ -183,6 +191,7 @@ class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
       return LoginPage(
         key: args.key,
         onResult: args.onResult,
+        onRegistration: args.onRegistration,
       );
     },
   );
@@ -192,15 +201,18 @@ class LoginRouteArgs {
   const LoginRouteArgs({
     this.key,
     required this.onResult,
+    required this.onRegistration,
   });
 
   final Key? key;
 
   final VoidCallback onResult;
 
+  final VoidCallback onRegistration;
+
   @override
   String toString() {
-    return 'LoginRouteArgs{key: $key, onResult: $onResult}';
+    return 'LoginRouteArgs{key: $key, onResult: $onResult, onRegistration: $onRegistration}';
   }
 }
 
@@ -221,6 +233,52 @@ class ProfileRoute extends PageRouteInfo<void> {
       return const ProfileScreen();
     },
   );
+}
+
+/// generated route for
+/// [RegistrationPage]
+class RegistrationRoute extends PageRouteInfo<RegistrationRouteArgs> {
+  RegistrationRoute({
+    Key? key,
+    required VoidCallback onResult,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RegistrationRoute.name,
+          args: RegistrationRouteArgs(
+            key: key,
+            onResult: onResult,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RegistrationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RegistrationRouteArgs>();
+      return RegistrationPage(
+        key: args.key,
+        onResult: args.onResult,
+      );
+    },
+  );
+}
+
+class RegistrationRouteArgs {
+  const RegistrationRouteArgs({
+    this.key,
+    required this.onResult,
+  });
+
+  final Key? key;
+
+  final VoidCallback onResult;
+
+  @override
+  String toString() {
+    return 'RegistrationRouteArgs{key: $key, onResult: $onResult}';
+  }
 }
 
 /// generated route for

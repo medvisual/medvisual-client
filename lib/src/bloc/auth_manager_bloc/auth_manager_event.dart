@@ -18,4 +18,6 @@ class RefreshToken extends AuthManagerEvent {
 
 class Logout extends AuthManagerEvent {}
 
+class TokenExpired extends AuthManagerEvent {}
+
 class TryInitUser extends AuthManagerEvent {}

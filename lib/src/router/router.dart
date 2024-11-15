@@ -10,6 +10,7 @@ import 'package:medvisual/src/presentation/pages/profile/view/profile_screen.dar
 import 'package:medvisual/src/presentation/pages/search/view/search_screen.dart';
 import 'package:medvisual/src/presentation/pages/settings/view/settings_screen.dart';
 import 'package:medvisual/src/router/auth_route_guard.dart';
+import 'package:medvisual/src/presentation/pages/auth/view/registration_page.dart';
 
 part 'router.gr.dart';
 
@@ -59,5 +60,6 @@ class AppRouter extends RootStackRouter {
           guards: [AuthGuard()],
         ),
         AutoRoute(page: LoginRoute.page, path: '/login'),
+        AutoRoute(page: RegistrationRoute.page, path: '/registration'),
       ];
 }

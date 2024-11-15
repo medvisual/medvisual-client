@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:medvisual/src/bloc/auth_manager_bloc/auth_manager_bloc.dart';
 import 'package:medvisual/src/data/models/auth_response/auth_response.dart';
 import 'package:medvisual/src/data/models/user/user.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:get_it/get_it.dart';
 
 class AuthRequest {
+  AuthRequest({required this.dio});
   final Dio dio;
   final talker = GetIt.I<Talker>();
-
-  AuthRequest({required this.dio});
 
   Future<AuthResponse> signIn(User user) async {
     try {
@@ -40,8 +40,22 @@ class AuthRequest {
       return _handleResponse<AuthResponse>(response, (data) {
         return AuthResponse.fromJson(data as Map<String, dynamic>);
       });
+    } on DioException catch (dioError) {
+      if (dioError.response?.statusCode == 401) {
+        // Handle token expiration
+        talker.log('Refresh token expired, dispatching TokenExpired event');
+        final authManager = GetIt.I<AuthManagerBloc>();
+        authManager.add(TokenExpired());
+        throw Exception('Token expired');
+      } else {
+        // Handle other Dio errors
+        talker.error('Dio error occurred: ${dioError.message}', dioError);
+        throw Exception('Dio error: ${dioError.message}');
+      }
     } catch (e) {
-      throw Exception('Error : $e');
+      // Handle any other errors
+      talker.error('Unexpected error: $e', e);
+      throw Exception('Unexpected error: $e');
     }
   }
 

@@ -21,6 +21,12 @@ class ImagePickerPageState extends State<ImagePickerPage> {
   File? image;
   Set<String> _selectedAdvancedDiseases = {};
 
+  @override
+  void initState() {
+    super.initState();
+    _selectedAdvancedDiseases = {widget.disease};
+  }
+
   // Function to update the image, passed to ImagePickerWidget
   void _updateImage(File newImage) {
     setState(() {
@@ -32,7 +38,7 @@ class ImagePickerPageState extends State<ImagePickerPage> {
   void _getVisualDiseases(File image) {
     _visualInformationBloc.add(
       GetVisualDecision(
-        presumedDiseases: [widget.disease, ..._selectedAdvancedDiseases],
+        presumedDiseases: _selectedAdvancedDiseases.toList(),
         image: image,
       ),
     );

@@ -9,15 +9,20 @@ class InformationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ImagesViewWidget(),
-        const DiseaseInformationWidget(),
-        const SizedBox(height: 20),
-        DeleteButton(onResult: () {
-          context.router.popForced();
-        })
-      ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Column(
+          children: [
+            ImagesViewWidget(),
+            const DiseaseInformationWidget(),
+            const SizedBox(height: 20),
+            DeleteButton(onResult: () {
+              context.router.popForced();
+            })
+          ],
+        ),
+      ),
     );
   }
 }

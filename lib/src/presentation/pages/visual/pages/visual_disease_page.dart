@@ -73,7 +73,7 @@ class ImagePickerPageState extends State<ImagePickerPage> {
   }
 }
 
-class OptinalDiseasesContainer extends StatelessWidget {
+class OptinalDiseasesContainer extends StatefulWidget {
   final Function(Set<String>) onSelected;
   final Set<String> selectedDiseases;
 
@@ -84,7 +84,16 @@ class OptinalDiseasesContainer extends StatelessWidget {
   });
 
   @override
+  State<OptinalDiseasesContainer> createState() =>
+      _OptinalDiseasesContainerState();
+}
+
+class _OptinalDiseasesContainerState extends State<OptinalDiseasesContainer> {
+  bool isError = false;
+
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BaseContainer(
       child: Column(
         children: [
@@ -96,39 +105,70 @@ class OptinalDiseasesContainer extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
-                  return Stack(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.92,
-                        child: DiseasesScreen(
-                          category: 'Пульмонология',
-                          showCheckboxes: true,
-                          initialSelectedDiseases: selectedDiseases,
-                          onResult: (diseasesSet) {
-                            onSelected(diseasesSet);
-                          },
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          color: Theme.of(context).colorScheme.surface,
-                          child: Center(
-                            child: BaseButton(
-                              margin: const EdgeInsets.symmetric(vertical: 30),
-                              onPressed: () {
-                                context.router.popForced();
+                  isError = false;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return Stack(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.92,
+                            child: DiseasesScreen(
+                              category: 'Пульмонология',
+                              showCheckboxes: true,
+                              initialSelectedDiseases: widget.selectedDiseases,
+                              onResult: (diseasesSet) {
+                                if (diseasesSet.isNotEmpty) {
+                                  setState(() {
+                                    isError = false;
+                                  });
+                                  widget.onSelected(diseasesSet);
+                                } else {
+                                  setState(() {
+                                    isError = true;
+                                  });
+                                }
                               },
-                              text: 'Готово',
-                              width: MediaQuery.of(context).size.width * 0.9,
                             ),
                           ),
-                        ),
-                      ),
-                    ],
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              color: Theme.of(context).colorScheme.surface,
+                              child: Center(
+                                child: BaseButton(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 30),
+                                  onPressed: () {
+                                    context.router.popForced();
+                                  },
+                                  color: isError
+                                      ? theme.primaryColor.withAlpha(100)
+                                      : null,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  child: isError
+                                      ? Text(
+                                          'Выберите хотя бы одну болезнь',
+                                          style: TextStyle(
+                                            color: Colors.white.withAlpha(100),
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Готово',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               );

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/presentation/pages/categories/view/categories_screen.dart';
-import 'package:medvisual/src/presentation/pages/chats/view/chat_screen.dart';
+import 'package:medvisual/src/presentation/pages/history/view/history_screen.dart';
 import 'package:medvisual/src/presentation/pages/diseases/pages/add_disease/view/add_diseases_page.dart';
 import 'package:medvisual/src/presentation/pages/diseases/view/diseases_screen.dart';
 import 'package:medvisual/src/presentation/pages/home/view/home_screen.dart';
@@ -23,7 +23,7 @@ class AppRouter extends RootStackRouter {
           path: '/',
           children: [
             AutoRoute(page: CategoriesRoute.page, path: 'categories'),
-            AutoRoute(page: ChatRoute.page, path: 'chats'),
+            AutoRoute(page: HistoryRoute.page, path: 'chats'),
             AutoRoute(page: ProfileRoute.page, path: 'profile'),
           ],
           // transitionsBuilder: (context, animation, secondaryAnimation, child) {

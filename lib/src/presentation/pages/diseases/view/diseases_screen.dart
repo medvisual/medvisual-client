@@ -103,6 +103,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
         title: Text(
           widget.category,
         ),
+        centerTitle: true,
         // Start of Selection
         actions: [
           if (!widget.showCheckboxes)

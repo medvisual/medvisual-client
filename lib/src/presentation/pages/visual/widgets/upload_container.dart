@@ -21,7 +21,6 @@ class UploadImageContainer extends StatelessWidget {
   final File? image;
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return BaseContainer(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -45,7 +44,7 @@ class UploadImageContainer extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 40, vertical: 6),
                     child: LoadingAnimationWidget.stretchedDots(
-                      color: theme.colorScheme.onSurface,
+                      color: Colors.white,
                       size: 40,
                     ),
                   );

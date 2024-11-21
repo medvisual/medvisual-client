@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class BaseListContainer extends StatelessWidget {
   const BaseListContainer({
     super.key,
-    required this.text,
+    this.text,
+    this.child,
     this.onTap,
     this.icon,
     this.width,
-  });
-  final String text;
+  }) : assert(text == null || child == null);
+  final String? text;
+  final Widget? child;
   final String? icon;
   final VoidCallback? onTap;
   final double? width;
@@ -43,16 +45,18 @@ class BaseListContainer extends StatelessWidget {
                       color: Colors.white,
                     )
                   : const SizedBox.shrink(),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  text,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Colors.white),
-                ),
-              ),
+              text != null
+                  ? FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        text!,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.white),
+                      ),
+                    )
+                  : child!
             ]),
       ),
     );

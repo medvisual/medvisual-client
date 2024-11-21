@@ -17,7 +17,9 @@ class SettingsButton extends StatelessWidget {
           AutoTabsRouter.of(context).navigateNamed('/settings');
         },
         icon: SvgPicture.asset(
-          'assets/icons/settings.svg',
+          'assets/icons/settings2.svg',
+          width: 24,
+          height: 24,
           colorFilter:
               ColorFilter.mode(theme.colorScheme.onSurface, BlendMode.srcIn),
         ),

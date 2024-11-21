@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
       child: AutoTabsRouter(
         routes: const [
           CategoriesRoute(),
-          ChatRoute(),
+          HistoryRoute(),
           ProfileRoute(),
         ],
         builder: (context, child) {

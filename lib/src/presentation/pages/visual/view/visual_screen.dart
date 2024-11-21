@@ -26,6 +26,7 @@ class _VisualScreenState extends State<VisualScreen> {
           appBar: AppBar(
             title:
                 FittedBox(fit: BoxFit.scaleDown, child: Text(widget.disease)),
+            centerTitle: true,
             leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {

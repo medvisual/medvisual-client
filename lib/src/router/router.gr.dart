@@ -75,31 +75,14 @@ class CategoriesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ChatScreen]
-class ChatRoute extends PageRouteInfo<void> {
-  const ChatRoute({List<PageRouteInfo>? children})
-      : super(
-          ChatRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ChatRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const ChatScreen();
-    },
-  );
-}
-
-/// generated route for
 /// [DiseasesScreen]
 class DiseasesRoute extends PageRouteInfo<DiseasesRouteArgs> {
   DiseasesRoute({
     Key? key,
     required String category,
     bool showCheckboxes = false,
+    void Function(Set<String>)? onResult,
+    Set<String>? initialSelectedDiseases,
     List<PageRouteInfo>? children,
   }) : super(
           DiseasesRoute.name,
@@ -107,6 +90,8 @@ class DiseasesRoute extends PageRouteInfo<DiseasesRouteArgs> {
             key: key,
             category: category,
             showCheckboxes: showCheckboxes,
+            onResult: onResult,
+            initialSelectedDiseases: initialSelectedDiseases,
           ),
           initialChildren: children,
         );
@@ -121,6 +106,8 @@ class DiseasesRoute extends PageRouteInfo<DiseasesRouteArgs> {
         key: args.key,
         category: args.category,
         showCheckboxes: args.showCheckboxes,
+        onResult: args.onResult,
+        initialSelectedDiseases: args.initialSelectedDiseases,
       );
     },
   );
@@ -131,6 +118,8 @@ class DiseasesRouteArgs {
     this.key,
     required this.category,
     this.showCheckboxes = false,
+    this.onResult,
+    this.initialSelectedDiseases,
   });
 
   final Key? key;
@@ -139,10 +128,33 @@ class DiseasesRouteArgs {
 
   final bool showCheckboxes;
 
+  final void Function(Set<String>)? onResult;
+
+  final Set<String>? initialSelectedDiseases;
+
   @override
   String toString() {
-    return 'DiseasesRouteArgs{key: $key, category: $category, showCheckboxes: $showCheckboxes}';
+    return 'DiseasesRouteArgs{key: $key, category: $category, showCheckboxes: $showCheckboxes, onResult: $onResult, initialSelectedDiseases: $initialSelectedDiseases}';
   }
+}
+
+/// generated route for
+/// [HistoryScreen]
+class HistoryRoute extends PageRouteInfo<void> {
+  const HistoryRoute({List<PageRouteInfo>? children})
+      : super(
+          HistoryRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HistoryRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HistoryScreen();
+    },
+  );
 }
 
 /// generated route for

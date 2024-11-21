@@ -9,6 +9,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -38,13 +39,20 @@ class SettingsScreen extends StatelessWidget {
               categoryTitle: 'Конфиденциальность',
               onCategoryWidgets: [
                 OnCategoryWidget(
-                    leftWidget: const Text('Сообщения Telegram'),
-                    rightWidget:
-                        Switch.adaptive(value: true, onChanged: (value) {})),
+                  leftWidget: const Text('Сообщения Telegram'),
+                  rightWidget: Switch.adaptive(
+                    value: true,
+                    onChanged: (value) {},
+                    activeColor: theme.primaryColor,
+                  ),
+                ),
                 OnCategoryWidget(
                     leftWidget: const Text('Видимость профиля'),
-                    rightWidget:
-                        Switch.adaptive(value: false, onChanged: (value) {})),
+                    rightWidget: Switch.adaptive(
+                      value: false,
+                      onChanged: (value) {},
+                      activeColor: theme.primaryColor,
+                    )),
               ],
             ),
             SettingCategoryWidget(

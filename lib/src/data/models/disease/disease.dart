@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:medvisual/src/data/repository/realm/realm_models/disease_realm.dart';
+import 'package:equatable/equatable.dart';
 
 part 'disease.g.dart';
 
 @JsonSerializable()
-class Disease {
+class Disease extends Equatable {
   const Disease(
       {this.id,
       required this.name,
@@ -30,4 +31,7 @@ class Disease {
 
   /// Connect the generated [_$DiseaseToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$DiseaseToJson(this);
+
+  @override
+  List<Object?> get props => [id, name, description, department];
 }

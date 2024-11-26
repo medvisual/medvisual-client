@@ -15,12 +15,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  int page = 1;
   // Bloc init
   final _diseasesBloc = DiseasesBloc();
 
   @override
   void initState() {
-    _diseasesBloc.add(GetDiseasesList());
+    _diseasesBloc.add(GetDiseasesList(page: page));
     super.initState();
   }
 

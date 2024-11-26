@@ -1,6 +1,7 @@
 export 'attention_visula_widget.dart';
 export 'delete_button.dart';
 export 'disease_information_widget.dart';
+export 'disease_inherit_widget.dart';
 export 'image_picker_widget.dart';
 export 'images_view_widget.dart';
 export 'select_diseases_widget.dart';

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/presentation/pages/diseases/widgets/widgets.dart';
 import 'package:medvisual/src/router/router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:medvisual/src/data/models/disease/disease.dart';
 
 @RoutePage()
 class DiseasesScreen extends StatefulWidget {
@@ -25,8 +27,14 @@ class DiseasesScreen extends StatefulWidget {
 }
 
 class _DiseasesScreenState extends State<DiseasesScreen> {
+  int page = 1;
+  final Set<Disease> _diseasesList = {};
+  bool loadingNedded = true;
+
   // Bloc init
   final _diseasesListBloc = DiseasesBloc();
+  //Scroll Controller
+  final _scrollController = ScrollController();
 
   // Track selected diseases only if checkboxes are shown
   final ValueNotifier<Set<String>> _selectedDiseases =
@@ -36,13 +44,15 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
   void initState() {
     super.initState();
 
+    _scrollController.addListener(_onScroll);
+
     // Initialize _selectedDiseases with initialSelectedDiseases if available
     if (widget.initialSelectedDiseases != null) {
       _selectedDiseases.value =
           Set<String>.from(widget.initialSelectedDiseases!);
     }
 
-    _diseasesListBloc.add(GetDiseasesList());
+    _diseasesListBloc.add(GetDiseasesList(page: page));
 
     // Add listener to _selectedDiseases
     _selectedDiseases.addListener(_onSelectedDiseasesChanged);
@@ -53,7 +63,20 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
     _selectedDiseases.removeListener(_onSelectedDiseasesChanged);
     _selectedDiseases.dispose();
     _diseasesListBloc.close();
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    // TODO: Make 80% of the screen
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        loadingNedded) {
+      // Reached the end of the list
+      page++;
+      _diseasesListBloc.add(GetDiseasesList(page: page));
+    }
   }
 
   // Listener method
@@ -65,6 +88,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
     }
   }
 
+  // FIXME: Change logic for moderator
   bool _isModerator() {
     return true;
   }
@@ -86,9 +110,9 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
       floatingActionButton: _isModerator() && !widget.showCheckboxes
           ? FloatingActionButton(
               onPressed: () {
-                context.router.push(AddDiseaseRoute(onResult: () {
-                  _diseasesListBloc.add(GetDiseasesList());
-                }));
+                context.router.push(AddDiseaseRoute(onResult: () {})).then((_) {
+                  _diseasesListBloc.add(GetDiseasesList(page: page));
+                });
               },
               backgroundColor: theme.primaryColor,
               child: const Icon(
@@ -133,11 +157,27 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
       body: BlocBuilder<DiseasesBloc, DiseasesState>(
         bloc: _diseasesListBloc,
         builder: (context, state) {
-          if (state is DiseasesListLoaded) {
+          if (state is DiseasesListLoaded || _diseasesList.isNotEmpty) {
+            try {
+              _diseasesList.addAll((state as DiseasesListLoaded).diseasesList);
+            } catch (e) {
+              debugPrint(e.toString());
+            }
+
             return ListView.builder(
-              itemCount: state.diseasesList.length,
+              controller: _scrollController,
+              itemCount: _diseasesList.length,
               itemBuilder: (BuildContext context, int index) {
-                final disease = state.diseasesList[index];
+                if (index == _diseasesList.length - 1 && loadingNedded) {
+                  return Center(
+                    child: LoadingAnimationWidget.discreteCircle(
+                        color: theme.colorScheme.onSurface,
+                        secondRingColor: theme.primaryColor,
+                        thirdRingColor: theme.primaryColor,
+                        size: 20),
+                  );
+                }
+                final disease = _diseasesList.elementAt(index);
                 if (widget.showCheckboxes) {
                   return ValueListenableBuilder<Set<String>>(
                     valueListenable: _selectedDiseases,
@@ -155,18 +195,19 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
                   );
                 } else {
                   return DiseasesListContainer(
+                    key: ValueKey(disease.id),
                     name: disease.name,
                     id: disease.id!,
                   );
                 }
               },
             );
-          } else if (state is DiseasesListLoading) {
+          } else if (state is DiseasesListLoading && _diseasesList.isEmpty) {
             return const DiseasesLoadingWidget();
           } else {
             return SomethingWrongWidget(
               tryAgainCallback: () {
-                _diseasesListBloc.add(GetDiseasesList());
+                _diseasesListBloc.add(GetDiseasesList(page: page));
               },
             );
           }

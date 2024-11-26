@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 
 class ImagesViewWidget extends StatelessWidget {
@@ -19,15 +18,16 @@ class ImagesViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseContainer(
-      child: CarouselSlider(
-          items: items.map((widget) {
+      child: SizedBox(
+        height: 200,
+        child: CarouselView(
+          itemExtent: MediaQuery.of(context).size.width * 0.6,
+          children: items.map((widget) {
             return ClipRRect(
                 borderRadius: BorderRadius.circular(20), child: widget);
           }).toList(),
-          options: CarouselOptions(
-              height: MediaQuery.of(context).size.height * 0.25,
-              viewportFraction: 0.8,
-              autoPlay: true)),
+        ),
+      ),
     );
   }
 }

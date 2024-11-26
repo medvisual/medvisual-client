@@ -96,7 +96,7 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
                     bloc: addDiseaseBloc,
                     builder: (context, state) {
                       if (state is AddDiseaseComplete) {
-                        context.router.popForced();
+                        context.router.back();
                       }
                       if (state is AddDiseaseInProgress) {
                         return LoadingAnimationWidget.stretchedDots(

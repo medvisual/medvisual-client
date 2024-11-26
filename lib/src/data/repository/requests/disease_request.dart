@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:medvisual/src/data/models/diseases_list/disease.dart';
+import 'package:medvisual/src/data/models/disease/disease.dart';
+import 'package:medvisual/src/data/models/pagination/pagination.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class DiseaseRequest {
@@ -9,13 +10,16 @@ class DiseaseRequest {
 
   final Dio dio;
   final talker = GetIt.I<Talker>();
-  Future<List<Disease>> getDiseaseList() async {
+  Future<List<Disease>> getDiseaseList(int page) async {
     try {
-      final String endPoint = _getEndpoint('/api/diseases');
-      final response = await dio.get(endPoint);
+      final String endPoint = _getEndpoint('/api/diseases/get');
+      final pagination = Pagination(page: page, pageSize: 20);
+      final response =
+          await dio.post(endPoint, data: pagination.getPagination());
 
-      return _handleResponse<List<Disease>>(response, (data) {
-        return (data as List<dynamic>).map((item) {
+      return _handleResponse<List<Disease>>(response, (response) {
+        response as Map<String, dynamic>;
+        return (response["data"] as List<dynamic>).map((item) {
           return Disease.fromJson(item as Map<String, dynamic>);
         }).toList();
       });

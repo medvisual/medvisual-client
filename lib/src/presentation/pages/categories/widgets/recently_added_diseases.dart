@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
 
 class RecentlyAddedDiseases extends StatelessWidget {
   const RecentlyAddedDiseases({

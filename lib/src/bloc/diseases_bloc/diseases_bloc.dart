@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/data/models/disease/disease.dart';
+import 'package:medvisual/src/data/models/diseases_page/diseases_page.dart';
 import 'package:medvisual/src/data/repository/realm/realm_models/disease_realm.dart';
 import 'package:medvisual/src/data/repository/realm/realm_repository/disease_repository.dart';
 import 'package:medvisual/src/data/repository/requests/disease_request.dart';
@@ -14,6 +15,7 @@ part 'diseases_state.dart';
 class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
   final talker = GetIt.I<Talker>();
   final diseaseRepository = DiseaseRepository(realm: GetIt.I<Realm>());
+  int pageNumber = 1;
 
   DiseasesBloc() : super(DiseasesListInitial()) {
     List<Disease> dbModelToDisease(List<RealmDisease> dbModelList) {
@@ -30,11 +32,15 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
       return diseases;
     }
 
-    Future<List<Disease>> getDiseasesApi(int page) async {
+    Future<DiseasesPage> getDiseasesApi(int page) async {
       talker.log('Trying to get diseases from endpoint');
       final diseaseRequest = DiseaseRequest(dio: GetIt.I<Dio>());
-      final diseaseList = await diseaseRequest.getDiseaseList(page);
-      return diseaseList;
+      final diseasesPage = await diseaseRequest.getDiseaseList(page);
+
+      // Update page number
+      pageNumber = diseasesPage.meta.page + 1;
+
+      return diseasesPage;
     }
 
     Future<void> saveDiseasesLocal(List<Disease> diseases) async {
@@ -50,7 +56,7 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
         emit(DiseasesListLoading());
 
         // Try to get diseases from local only if it first page (Optimization prediction for many diseases)
-        if (event.page == 1) {
+        if (pageNumber == 1) {
           try {
             final diseases = await getDiseasesLocal();
 
@@ -63,12 +69,14 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
         }
 
         // Main logic of getting diseases from api
-        final diseaseList = await getDiseasesApi(event.page);
-        emit(DiseasesListLoaded(diseasesList: diseaseList));
+        final diseasesPage = await getDiseasesApi(pageNumber);
+        emit(DiseasesListLoaded(
+            diseasesList: diseasesPage.diseases,
+            hasNextPage: diseasesPage.meta.hasNextPage));
 
         // Saving diseases from api to local database (Also only if it's first page)
-        if (event.page == 1) {
-          saveDiseasesLocal(diseaseList);
+        if (pageNumber == 1) {
+          saveDiseasesLocal(diseasesPage.diseases);
         }
       } catch (e) {
         talker.error(e);

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/presentation/pages/visual/widgets/widgets.dart';
-import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
 
 class UploadImageContainer extends StatelessWidget {
   const UploadImageContainer(

@@ -7,9 +7,10 @@ class DiseasesListInitial extends DiseasesState {}
 class DiseasesListLoading extends DiseasesState {}
 
 class DiseasesListLoaded extends DiseasesState {
-  DiseasesListLoaded({required this.diseasesList});
+  DiseasesListLoaded({required this.diseasesList, this.hasNextPage});
 
   final List<Disease> diseasesList;
+  final bool? hasNextPage;
 }
 
 class DiseasesListError extends DiseasesState {

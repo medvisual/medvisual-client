@@ -27,9 +27,8 @@ class DiseasesScreen extends StatefulWidget {
 }
 
 class _DiseasesScreenState extends State<DiseasesScreen> {
-  int page = 1;
   final Set<Disease> _diseasesList = {};
-  bool loadingNedded = true;
+  bool hasNextPage = true;
 
   // Bloc init
   final _diseasesListBloc = DiseasesBloc();
@@ -52,7 +51,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           Set<String>.from(widget.initialSelectedDiseases!);
     }
 
-    _diseasesListBloc.add(GetDiseasesList(page: page));
+    _diseasesListBloc.add(GetDiseasesList());
 
     // Add listener to _selectedDiseases
     _selectedDiseases.addListener(_onSelectedDiseasesChanged);
@@ -72,10 +71,9 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
     // TODO: Make 80% of the screen
     if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent &&
-        loadingNedded) {
+        hasNextPage) {
       // Reached the end of the list
-      page++;
-      _diseasesListBloc.add(GetDiseasesList(page: page));
+      _diseasesListBloc.add(GetDiseasesList());
     }
   }
 
@@ -111,7 +109,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           ? FloatingActionButton(
               onPressed: () {
                 context.router.push(AddDiseaseRoute(onResult: () {})).then((_) {
-                  _diseasesListBloc.add(GetDiseasesList(page: page));
+                  _diseasesListBloc.add(GetDiseasesList());
                 });
               },
               backgroundColor: theme.primaryColor,
@@ -158,17 +156,16 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
         bloc: _diseasesListBloc,
         builder: (context, state) {
           if (state is DiseasesListLoaded || _diseasesList.isNotEmpty) {
-            try {
-              _diseasesList.addAll((state as DiseasesListLoaded).diseasesList);
-            } catch (e) {
-              debugPrint(e.toString());
+            if (state is DiseasesListLoaded) {
+              _diseasesList.addAll(state.diseasesList);
+              hasNextPage = state.hasNextPage ?? true;
             }
 
             return ListView.builder(
               controller: _scrollController,
               itemCount: _diseasesList.length,
               itemBuilder: (BuildContext context, int index) {
-                if (index == _diseasesList.length - 1 && loadingNedded) {
+                if (index == _diseasesList.length - 1 && hasNextPage) {
                   return Center(
                     child: LoadingAnimationWidget.discreteCircle(
                         color: theme.colorScheme.onSurface,
@@ -207,7 +204,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           } else {
             return SomethingWrongWidget(
               tryAgainCallback: () {
-                _diseasesListBloc.add(GetDiseasesList(page: page));
+                _diseasesListBloc.add(GetDiseasesList());
               },
             );
           }

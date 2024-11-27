@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/presentation/pages/categories/categories.dart';
-import 'package:medvisual/src/presentation/ui/widgets/diseases_list_container.dart';
+import 'package:medvisual/src/presentation/core/widgets/diseases_list_container.dart';
 
 @RoutePage()
 class SearchScreen extends StatefulWidget {
@@ -15,13 +15,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  int page = 1;
   // Bloc init
   final _diseasesBloc = DiseasesBloc();
 
   @override
   void initState() {
-    _diseasesBloc.add(GetDiseasesList(page: page));
+    _diseasesBloc.add(GetDiseasesList());
     super.initState();
   }
 

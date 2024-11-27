@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/bloc/auth_manager_bloc/auth_manager_bloc.dart';
-import 'package:medvisual/src/presentation/ui/widgets/inut_field.dart';
-import 'package:medvisual/src/presentation/ui/widgets/base_button.dart';
+import 'package:medvisual/src/presentation/core/widgets/inut_field.dart';
+import 'package:medvisual/src/presentation/core/widgets/base_button.dart';
 
 @RoutePage()
 class RegistrationPage extends StatelessWidget {

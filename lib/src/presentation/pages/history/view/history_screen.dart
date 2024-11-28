@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 
 @RoutePage()
 class HistoryScreen extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/presentation/pages/visual/pages/visual_disease_page.dart';
 import 'package:medvisual/src/presentation/pages/visual/pages/information_page.dart';
-import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 import 'package:medvisual/src/presentation/pages/visual/widgets/disease_inherit_widget.dart';
 
 class VisualScreen extends StatefulWidget {

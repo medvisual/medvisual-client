@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/presentation/pages/diseases/view/diseases_screen.dart';
 import 'package:medvisual/src/presentation/pages/visual/widgets/widgets.dart';
-import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 
 class ImagePickerPage extends StatefulWidget {

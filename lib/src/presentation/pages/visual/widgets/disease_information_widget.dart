@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 
 class DiseaseInformationWidget extends StatelessWidget {
   const DiseaseInformationWidget({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/router/router.dart';
-import 'package:medvisual/src/presentation/core/theme/theme.dart';
+import 'package:medvisual/src/presentation/ui/theme/theme.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});

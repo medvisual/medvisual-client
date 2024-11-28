@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/presentation/core/widgets/base_button.dart';
+import 'package:medvisual/src/presentation/ui/widgets/base_button.dart';
 
 class SomethingWrongWidget extends StatelessWidget {
   const SomethingWrongWidget({

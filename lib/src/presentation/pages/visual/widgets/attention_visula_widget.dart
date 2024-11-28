@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:medvisual/src/presentation/core/widgets/widgets.dart';
+import 'package:medvisual/src/presentation/ui/widgets/widgets.dart';
 
 class AttentionVisualWidget extends StatelessWidget {
   const AttentionVisualWidget({

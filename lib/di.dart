@@ -24,11 +24,6 @@ Future<void> setupDependencies() async {
   final config = Configuration.local([RealmDisease.schema]);
   final realm = Realm(config);
 
-  // FIXME: DELETE THIS LOGIC
-  realm.write(() {
-    realm.deleteAll<RealmDisease>();
-  });
-
   // Initialize secure storage
   const secureStorage = FlutterSecureStorage();
   getIt.registerSingleton(secureStorage);

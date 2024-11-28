@@ -70,7 +70,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
   void _onScroll() {
     // TODO: Make 80% of the screen
     if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent * 0.8 &&
         hasNextPage) {
       // Reached the end of the list
       _diseasesListBloc.add(GetDiseasesList());
@@ -163,6 +163,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
 
             return ListView.builder(
               controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: _diseasesList.length,
               itemBuilder: (BuildContext context, int index) {
                 if (index == _diseasesList.length - 1 && hasNextPage) {

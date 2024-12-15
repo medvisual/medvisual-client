@@ -1,16 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:medvisual/src/presentation/pages/categories/view/categories_screen.dart';
-import 'package:medvisual/src/presentation/pages/history/view/history_screen.dart';
-import 'package:medvisual/src/presentation/pages/diseases/pages/add_disease/view/add_diseases_page.dart';
-import 'package:medvisual/src/presentation/pages/diseases/view/diseases_screen.dart';
-import 'package:medvisual/src/presentation/pages/home/view/home_screen.dart';
-import 'package:medvisual/src/presentation/pages/auth/view/login_page.dart';
-import 'package:medvisual/src/presentation/pages/profile/view/profile_screen.dart';
-import 'package:medvisual/src/presentation/pages/search/view/search_screen.dart';
-import 'package:medvisual/src/presentation/pages/settings/view/settings_screen.dart';
+import 'package:medvisual/src/presentation/categories/view/categories_screen.dart';
+import 'package:medvisual/src/presentation/history/view/history_screen.dart';
+import 'package:medvisual/src/presentation/diseases/pages/add_disease/view/add_diseases_page.dart';
+import 'package:medvisual/src/presentation/diseases/view/diseases_screen.dart';
+import 'package:medvisual/src/presentation/home/view/home_screen.dart';
+import 'package:medvisual/src/presentation/auth/view/login_page.dart';
+import 'package:medvisual/src/presentation/profile/view/profile_screen.dart';
+import 'package:medvisual/src/presentation/search/view/search_screen.dart';
+import 'package:medvisual/src/presentation/settings/view/settings_screen.dart';
 import 'package:medvisual/src/router/auth_route_guard.dart';
-import 'package:medvisual/src/presentation/pages/auth/view/registration_page.dart';
+import 'package:medvisual/src/presentation/auth/view/registration_page.dart';
 
 part 'router.gr.dart';
 
@@ -40,10 +40,8 @@ class AppRouter extends RootStackRouter {
           page: SearchRoute.page,
           path: '/search',
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            final fadeOut = Tween<Offset>(
-                    begin: const Offset(0, 1), end: const Offset(0, 0))
-                .animate(animation);
-            return SlideTransition(position: fadeOut, child: child);
+            final fadeOut = Tween<double>(begin: 0, end: 1).animate(animation);
+            return FadeTransition(opacity: fadeOut, child: child);
           },
           durationInMilliseconds: 200,
           opaque: true,

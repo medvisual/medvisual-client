@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/bloc/auth_manager_bloc/auth_manager_bloc.dart';
-import 'package:medvisual/src/presentation/pages/auth/view/view.dart';
+import 'package:medvisual/src/presentation/auth/view/view.dart';
 
 class AuthGuard extends AutoRouteGuard {
   @override

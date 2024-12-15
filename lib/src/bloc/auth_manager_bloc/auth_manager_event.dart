@@ -10,7 +10,6 @@ class Login extends AuthManagerEvent {
 }
 
 class RefreshToken extends AuthManagerEvent {
-  //FIXME: No need in new logic
   RefreshToken({required this.resfreshToken});
 
   final String resfreshToken;

@@ -2,19 +2,21 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:medvisual/src/data/models/user/user.dart';
-import 'package:medvisual/src/data/repository/requests/auth_request.dart';
-import 'package:medvisual/src/data/repository/managers/token_manager/token_manager.dart';
+import 'package:medvisual/src/data/remote/models/user/user.dart';
+import 'package:medvisual/src/data/remote/request/auth_request.dart';
+import 'package:medvisual/src/domain/managers/token_manager/token_manager.dart';
+import 'package:medvisual/src/domain/remote_repository/auth_repository.dart';
 
 part 'auth_manager_event.dart';
 part 'auth_manager_state.dart';
 
 class AuthManagerBloc extends Bloc<AuthManagerEvent, AuthManagerState> {
+  final AuthRepository authRepository;
   final secureStorage = GetIt.I<FlutterSecureStorage>();
   final authRequest = AuthRequest(dio: GetIt.I<Dio>());
-  final tokenManager = TokenManager();
+  final tokenManager = GetIt.I<TokenManager>();
 
-  AuthManagerBloc() : super(AuthNone()) {
+  AuthManagerBloc(this.authRepository) : super(AuthNone()) {
     on<TryInitUser>((event, emit) async {
       try {
         if (await secureStorage.containsKey(key: 'accessToken')) {
@@ -31,8 +33,8 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, AuthManagerState> {
       try {
         emit(AuthInProgress());
         final user = User(email: event.email, password: event.password);
-        final response = await authRequest.signIn(user);
-        tokenManager.refreshTokensStorage(
+        final response = await authRepository.login(user);
+        await tokenManager.refreshTokensStorage(
             response.accessToken, response.refreshToken);
         emit(Authenticated());
       } catch (e) {

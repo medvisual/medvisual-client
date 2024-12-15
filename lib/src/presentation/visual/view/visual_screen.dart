@@ -1,12 +1,18 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/core/widgets/widgets.dart';
 import 'package:medvisual/src/presentation/visual/pages/visual_disease_page.dart';
 import 'package:medvisual/src/presentation/visual/pages/information_page.dart';
 import 'package:medvisual/src/presentation/visual/widgets/disease_inherit_widget.dart';
 
+@RoutePage()
 class VisualScreen extends StatefulWidget {
   const VisualScreen(
-      {super.key, required this.disease, required this.diseaseId});
+      {super.key,
+      required this.disease,
+      required this.diseaseId,
+      required this.category});
+  final String category;
   final String disease;
   final int diseaseId;
 

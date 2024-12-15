@@ -14,3 +14,12 @@ PageMeta _$PageMetaFromJson(Map<String, dynamic> json) => PageMeta(
       hasPreviousPage: json['hasPreviousPage'] as bool,
       hasNextPage: json['hasNextPage'] as bool,
     );
+
+Map<String, dynamic> _$PageMetaToJson(PageMeta instance) => <String, dynamic>{
+      'page': instance.page,
+      'pageSize': instance.pageSize,
+      'itemCount': instance.itemCount,
+      'pageCount': instance.pageCount,
+      'hasPreviousPage': instance.hasPreviousPage,
+      'hasNextPage': instance.hasNextPage,
+    };

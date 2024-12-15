@@ -6,6 +6,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/presentation/categories/categories.dart';
 import 'package:medvisual/src/core/widgets/diseases_list_container.dart';
+import 'package:medvisual/src/router/router.dart';
 
 @RoutePage()
 class SearchScreen extends StatefulWidget {
@@ -82,7 +83,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemBuilder: (context, index) {
                         return DiseasesListContainer(
                           name: state.diseasesList[index].name,
-                          id: state.diseasesList[index].id!,
+                          onTap: () {
+                            context.router.push(
+                              VisualRoute(
+                                disease: state.diseasesList[index].name,
+                                diseaseId: state.diseasesList[index].id!,
+                                category: state.diseasesList[index].department,
+                              ),
+                            );
+                          },
                         );
                       },
                     );
@@ -92,7 +101,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemBuilder: (context, index) {
                         return DiseasesListContainer(
                           name: state.diseasesList[index].name,
-                          id: state.diseasesList[index].id!,
+                          onTap: () {
+                            context.router.push(
+                              VisualRoute(
+                                disease: state.diseasesList[index].name,
+                                diseaseId: state.diseasesList[index].id!,
+                                category: state.diseasesList[index].department,
+                              ),
+                            );
+                          },
                         );
                       },
                     );

@@ -330,3 +330,61 @@ class SettingsRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [VisualScreen]
+class VisualRoute extends PageRouteInfo<VisualRouteArgs> {
+  VisualRoute({
+    Key? key,
+    required String disease,
+    required int diseaseId,
+    required String category,
+    List<PageRouteInfo>? children,
+  }) : super(
+          VisualRoute.name,
+          args: VisualRouteArgs(
+            key: key,
+            disease: disease,
+            diseaseId: diseaseId,
+            category: category,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'VisualRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<VisualRouteArgs>();
+      return VisualScreen(
+        key: args.key,
+        disease: args.disease,
+        diseaseId: args.diseaseId,
+        category: args.category,
+      );
+    },
+  );
+}
+
+class VisualRouteArgs {
+  const VisualRouteArgs({
+    this.key,
+    required this.disease,
+    required this.diseaseId,
+    required this.category,
+  });
+
+  final Key? key;
+
+  final String disease;
+
+  final int diseaseId;
+
+  final String category;
+
+  @override
+  String toString() {
+    return 'VisualRouteArgs{key: $key, disease: $disease, diseaseId: $diseaseId, category: $category}';
+  }
+}

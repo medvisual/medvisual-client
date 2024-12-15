@@ -9,6 +9,7 @@ import 'package:medvisual/src/presentation/auth/view/login_page.dart';
 import 'package:medvisual/src/presentation/profile/view/profile_screen.dart';
 import 'package:medvisual/src/presentation/search/view/search_screen.dart';
 import 'package:medvisual/src/presentation/settings/view/settings_screen.dart';
+import 'package:medvisual/src/presentation/visual/view/visual_screen.dart';
 import 'package:medvisual/src/router/auth_route_guard.dart';
 import 'package:medvisual/src/presentation/auth/view/registration_page.dart';
 

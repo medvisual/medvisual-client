@@ -2,7 +2,11 @@ part of 'diseases_bloc.dart';
 
 abstract class DiseasesEvent {}
 
-class GetDiseasesList extends DiseasesEvent {}
+class GetDiseasesList extends DiseasesEvent {
+  final String? department;
+
+  GetDiseasesList({this.department});
+}
 
 class AddDisease extends DiseasesEvent {
   AddDisease(

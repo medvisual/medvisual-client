@@ -4,7 +4,10 @@ class Pagination {
   final int? pageSize;
   Map<String, dynamic> getPagination() {
     return <String, dynamic>{
-      'pagination': <String, dynamic>{'page': page, 'pageSize': pageSize}
+      'pagination': <String, dynamic>{
+        'page': page,
+        'pageSize': pageSize,
+      }
     };
   }
 }

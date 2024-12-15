@@ -69,5 +69,5 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton(authManager);
 
   // Attempt to initialize user if previously logged in
-  // authManager.add(TryInitUser());
+  authManager.add(TryInitUser());
 }

@@ -195,7 +195,13 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
                   return DiseasesListContainer(
                     key: ValueKey(disease.id),
                     name: disease.name,
-                    id: disease.id!,
+                    onTap: () {
+                      context.router.push(VisualRoute(
+                        category: widget.category,
+                        disease: disease.name,
+                        diseaseId: disease.id!,
+                      ));
+                    },
                   );
                 }
               },

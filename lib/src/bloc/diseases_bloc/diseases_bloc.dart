@@ -45,9 +45,10 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
       talker.log('Diseases saved to realm!');
     }
 
-    Future<DiseasesPage> getDiseasesApi(int page) async {
+    Future<DiseasesPage> getDiseasesApi(int page, String? department) async {
       talker.log('Trying to get diseases from endpoint');
-      final diseasesPage = await diseaseRepository.getDiseases(page);
+      final diseasesPage =
+          await diseaseRepository.getDiseases(page, department);
       // Saving diseases from api to local database (Also only if it's first page)
       if (diseasesPage.meta.page == 1) {
         saveDiseasesLocal(diseasesPage.diseases);
@@ -63,7 +64,7 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
     on<GetDiseasesList>((event, emit) async {
       if (!hasNextPage) return;
 
-      await _onGetDiseasesList(emit, getDiseasesLocal, getDiseasesApi);
+      await _onGetDiseasesList(emit, event, getDiseasesLocal, getDiseasesApi);
     });
 
     on<AddDisease>((event, emit) async {
@@ -129,8 +130,10 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
 
   Future<void> _onGetDiseasesList(
       Emitter<DiseasesState> emit,
+      GetDiseasesList event,
       Future<List<Disease>> Function() getDiseasesLocal,
-      Future<DiseasesPage> Function(int page) getDiseasesApi) async {
+      Future<DiseasesPage> Function(int page, String? department)
+          getDiseasesApi) async {
     try {
       emit(DiseasesListLoading());
 
@@ -149,7 +152,7 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
 
       // Main logic of getting diseases from api
       if (hasNextPage) {
-        final diseasesPage = await getDiseasesApi(pageNumber);
+        final diseasesPage = await getDiseasesApi(pageNumber, event.department);
         emit(DiseasesListLoaded(
             diseasesList: diseasesPage.diseases, hasNextPage: hasNextPage));
       }

@@ -22,7 +22,7 @@ class DiseaseRepositoryImpl implements DiseaseRepository {
   }
 
   @override
-  Future<DiseasesPage> getDiseases(int page) async {
+  Future<DiseasesPage> getDiseases(int page, String? department) async {
     final diseaseRequest = DiseaseRequest(dio: dio);
     final diseasePage = await diseaseRequest.getDiseaseList(page);
     return diseasePage;

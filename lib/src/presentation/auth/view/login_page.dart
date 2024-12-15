@@ -30,6 +30,12 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthManagerBloc, AuthManagerState>(
       listener: (context, state) {
         if (state is AuthInProgress) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Авторизация в процессе'),
+              duration: Duration(milliseconds: 200),
+            ),
+          );
           showDialog(
               context: context,
               builder: (context) {

@@ -52,7 +52,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           Set<String>.from(widget.initialSelectedDiseases!);
     }
 
-    _diseasesListBloc.add(GetDiseasesList());
+    _diseasesListBloc.add(GetDiseasesList(department: widget.category));
 
     // Add listener to _selectedDiseases
     _selectedDiseases.addListener(_onSelectedDiseasesChanged);
@@ -73,7 +73,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
             _scrollController.position.maxScrollExtent * 0.8 &&
         _diseasesListBloc.state is DiseasesListLoaded &&
         hasNextPage) {
-      _diseasesListBloc.add(GetDiseasesList());
+      _diseasesListBloc.add(GetDiseasesList(department: widget.category));
     }
   }
 
@@ -109,7 +109,8 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           ? FloatingActionButton(
               onPressed: () {
                 context.router.push(AddDiseaseRoute(onResult: () {})).then((_) {
-                  _diseasesListBloc.add(GetDiseasesList());
+                  _diseasesListBloc
+                      .add(GetDiseasesList(department: widget.category));
                 });
               },
               backgroundColor: theme.primaryColor,
@@ -199,6 +200,7 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
                       context.router.push(VisualRoute(
                         category: widget.category,
                         disease: disease.name,
+                        description: disease.description,
                         diseaseId: disease.id!,
                       ));
                     },
@@ -211,7 +213,8 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
           } else {
             return SomethingWrongWidget(
               tryAgainCallback: () {
-                _diseasesListBloc.add(GetDiseasesList());
+                _diseasesListBloc
+                    .add(GetDiseasesList(department: widget.category));
               },
             );
           }

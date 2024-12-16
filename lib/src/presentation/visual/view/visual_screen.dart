@@ -11,8 +11,10 @@ class VisualScreen extends StatefulWidget {
       {super.key,
       required this.disease,
       required this.diseaseId,
-      required this.category});
+      required this.category,
+      required this.description});
   final String category;
+  final String description;
   final String disease;
   final int diseaseId;
 
@@ -49,7 +51,9 @@ class _VisualScreenState extends State<VisualScreen> {
           body: PageView(
             controller: controller,
             children: [
-              const InformationPage(),
+              InformationPage(
+                description: widget.description,
+              ),
               ImagePickerPage(disease: widget.disease)
             ],
           )),

@@ -339,6 +339,7 @@ class VisualRoute extends PageRouteInfo<VisualRouteArgs> {
     required String disease,
     required int diseaseId,
     required String category,
+    required String description,
     List<PageRouteInfo>? children,
   }) : super(
           VisualRoute.name,
@@ -347,6 +348,7 @@ class VisualRoute extends PageRouteInfo<VisualRouteArgs> {
             disease: disease,
             diseaseId: diseaseId,
             category: category,
+            description: description,
           ),
           initialChildren: children,
         );
@@ -362,6 +364,7 @@ class VisualRoute extends PageRouteInfo<VisualRouteArgs> {
         disease: args.disease,
         diseaseId: args.diseaseId,
         category: args.category,
+        description: args.description,
       );
     },
   );
@@ -373,6 +376,7 @@ class VisualRouteArgs {
     required this.disease,
     required this.diseaseId,
     required this.category,
+    required this.description,
   });
 
   final Key? key;
@@ -383,8 +387,10 @@ class VisualRouteArgs {
 
   final String category;
 
+  final String description;
+
   @override
   String toString() {
-    return 'VisualRouteArgs{key: $key, disease: $disease, diseaseId: $diseaseId, category: $category}';
+    return 'VisualRouteArgs{key: $key, disease: $disease, diseaseId: $diseaseId, category: $category, description: $description}';
   }
 }

@@ -87,6 +87,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             context.router.push(
                               VisualRoute(
                                 disease: state.diseasesList[index].name,
+                                description:
+                                    state.diseasesList[index].description,
                                 diseaseId: state.diseasesList[index].id!,
                                 category: state.diseasesList[index].department,
                               ),
@@ -105,6 +107,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             context.router.push(
                               VisualRoute(
                                 disease: state.diseasesList[index].name,
+                                description:
+                                    state.diseasesList[index].description,
                                 diseaseId: state.diseasesList[index].id!,
                                 category: state.diseasesList[index].department,
                               ),

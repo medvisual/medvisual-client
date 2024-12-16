@@ -38,15 +38,9 @@ class AppRouter extends RootStackRouter {
 
         // Custom Route for Search with Slide transition from top
         CustomRoute(
-          page: SearchRoute.page,
-          path: '/search',
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            final fadeOut = Tween<double>(begin: 0, end: 1).animate(animation);
-            return FadeTransition(opacity: fadeOut, child: child);
-          },
-          durationInMilliseconds: 200,
-          opaque: true,
-        ),
+            page: SearchRoute.page,
+            path: '/search',
+            transitionsBuilder: TransitionsBuilders.fadeIn),
 
         AutoRoute(page: SettingsRoute.page, path: '/settings'),
         AutoRoute(
@@ -60,5 +54,6 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(page: LoginRoute.page, path: '/login'),
         AutoRoute(page: RegistrationRoute.page, path: '/registration'),
+        AutoRoute(page: VisualRoute.page, path: '/visual'),
       ];
 }

@@ -5,7 +5,10 @@ import 'package:auto_route/auto_route.dart'; // Provides 'router' extension
 class InformationPage extends StatelessWidget {
   const InformationPage({
     super.key,
+    required this.description,
   });
+
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class InformationPage extends StatelessWidget {
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: ImagesViewWidget()),
-            const DiseaseInformationWidget(),
+            DiseaseInformationWidget(description: description),
             const SizedBox(height: 20),
             DeleteButton(onResult: () {
               context.router.popForced();

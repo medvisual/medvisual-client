@@ -13,8 +13,14 @@ class LocalDiseaseRepositoryImpl implements LocalDiseaseRepository {
   }
 
   @override
-  Future<List<RealmDisease>> getDiseases() async {
-    return realm.all<RealmDisease>().toList();
+  Future<List<RealmDisease>> getDiseases(String? department) async {
+    if (department != null) {
+      return realm
+          .all<RealmDisease>()
+          .query(r'department == $0', [department]).toList();
+    } else {
+      return realm.all<RealmDisease>().toList();
+    }
   }
 
   @override
@@ -42,6 +48,13 @@ class LocalDiseaseRepositoryImpl implements LocalDiseaseRepository {
 
     realm.write(() {
       realm.delete(diseaseToDelete);
+    });
+  }
+
+  @override
+  Future<void> deleteAllDiseases() async {
+    realm.write(() {
+      realm.deleteAll();
     });
   }
 }

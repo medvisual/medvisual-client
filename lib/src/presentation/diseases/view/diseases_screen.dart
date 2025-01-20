@@ -108,7 +108,10 @@ class _DiseasesScreenState extends State<DiseasesScreen> {
       floatingActionButton: _isModerator() && !widget.showCheckboxes
           ? FloatingActionButton(
               onPressed: () {
-                context.router.push(AddDiseaseRoute(onResult: () {})).then((_) {
+                context.router
+                    .push(AddDiseaseRoute(
+                        department: widget.category, onResult: () {}))
+                    .then((_) {
                   _diseasesListBloc
                       .add(GetDiseasesList(department: widget.category));
                 });

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:medvisual/src/core/constants/app_constants.dart';
 import 'package:medvisual/src/data/remote/models/disease/disease.dart';
 import 'package:medvisual/src/data/remote/models/diseases_page/diseases_page.dart';
-import 'package:medvisual/src/data/remote/models/pagination/pagination.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:medvisual/src/data/remote/models/page_meta/page_meta.dart';
 
@@ -15,13 +15,13 @@ class DiseaseRequest {
 
   Future<DiseasesPage> getDiseaseList(int page, String? department) async {
     try {
-      final String endPoint = _getEndpoint('/api/diseases/get');
-      final pagination = Pagination(page: page, pageSize: 30).getPagination();
-      final response = await dio.post(endPoint,
-          data: pagination, queryParameters: {'where[department]': department});
+      final String endPoint = _getEndpoint('/api/diseases');
+      final response = await dio.get(endPoint, queryParameters: {
+        'where[department]': department,
+        'pagination[pageSize]': AppConstants.pageSizeConstant,
+        'pagination[page]': page
+      });
       return _handleResponse<DiseasesPage>(response, (response) {
-        // Cast to Map<String, dynamic>
-        response as Map<String, dynamic>;
         final meta = PageMeta.fromJson(response["meta"]);
         final diseasesList = (response["data"] as List<dynamic>).map((item) {
           return Disease.fromJson(item as Map<String, dynamic>);
@@ -38,8 +38,8 @@ class DiseaseRequest {
   Future<void> addDisease(Disease disease) async {
     try {
       final String endPoint = _getEndpoint('/api/diseases');
-      final response = await dio.post(endPoint, data: disease.toJson());
-
+      final response = await dio.post(endPoint,
+          data: disease.toJson(), options: Options(requestEncoder: null));
       _handleResponse<void>(response, (_) {
         talker.info('New disease successfully added!');
       });

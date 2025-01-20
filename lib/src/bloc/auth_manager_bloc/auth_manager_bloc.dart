@@ -43,6 +43,21 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, AuthManagerState> {
       }
     });
 
+    on<Register>((event, emit) async {
+      try {
+        emit(AuthInProgress());
+        final user = User(
+            username: event.username,
+            email: event.email,
+            password: event.password);
+        await authRepository.register(user);
+        emit(Authenticated());
+      } catch (e) {
+        emit(AuthNone());
+        throw Exception('Error was occured in AuthManagerBloc. Error: $e');
+      }
+    });
+
     on<Logout>((event, emit) async {
       emit(AuthNone());
     });

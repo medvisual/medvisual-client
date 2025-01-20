@@ -12,6 +12,7 @@ class Disease extends Equatable {
       required this.description,
       required this.department});
 
+  @JsonKey(includeIfNull: false)
   final int? id;
   final String name;
   final String description;

@@ -4,8 +4,13 @@ part 'user.g.dart';
 
 @JsonSerializable()
 class User {
-  User({required this.email, required this.password, this.role = 'user'});
-
+  User(
+      {this.username,
+      required this.email,
+      required this.password,
+      this.role = 'user'});
+  @JsonKey(includeIfNull: false)
+  final String? username;
   final String email;
   final String password;
   @JsonKey(includeToJson: false, includeFromJson: false)

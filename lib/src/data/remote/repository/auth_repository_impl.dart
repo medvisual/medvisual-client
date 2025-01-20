@@ -14,4 +14,10 @@ class AuthRepositoryImpl implements AuthRepository {
     final authReposnse = await authRequest.signIn(user);
     return authReposnse;
   }
+
+  @override
+  Future<void> register(User user) async {
+    final authRequest = AuthRequest(dio: dio);
+    await authRequest.signUp(user);
+  }
 }

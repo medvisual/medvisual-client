@@ -15,12 +15,14 @@ class AddDiseaseRoute extends PageRouteInfo<AddDiseaseRouteArgs> {
   AddDiseaseRoute({
     Key? key,
     required void Function() onResult,
+    required String department,
     List<PageRouteInfo>? children,
   }) : super(
           AddDiseaseRoute.name,
           args: AddDiseaseRouteArgs(
             key: key,
             onResult: onResult,
+            department: department,
           ),
           initialChildren: children,
         );
@@ -34,6 +36,7 @@ class AddDiseaseRoute extends PageRouteInfo<AddDiseaseRouteArgs> {
       return AddDiseasePage(
         key: args.key,
         onResult: args.onResult,
+        department: args.department,
       );
     },
   );
@@ -43,15 +46,18 @@ class AddDiseaseRouteArgs {
   const AddDiseaseRouteArgs({
     this.key,
     required this.onResult,
+    required this.department,
   });
 
   final Key? key;
 
   final void Function() onResult;
 
+  final String department;
+
   @override
   String toString() {
-    return 'AddDiseaseRouteArgs{key: $key, onResult: $onResult}';
+    return 'AddDiseaseRouteArgs{key: $key, onResult: $onResult, department: $department}';
   }
 }
 

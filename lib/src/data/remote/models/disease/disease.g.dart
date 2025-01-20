@@ -13,9 +13,18 @@ Disease _$DiseaseFromJson(Map<String, dynamic> json) => Disease(
       department: json['department'] as String,
     );
 
-Map<String, dynamic> _$DiseaseToJson(Disease instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'description': instance.description,
-      'department': instance.department,
-    };
+Map<String, dynamic> _$DiseaseToJson(Disease instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  val['name'] = instance.name;
+  val['description'] = instance.description;
+  val['department'] = instance.department;
+  return val;
+}

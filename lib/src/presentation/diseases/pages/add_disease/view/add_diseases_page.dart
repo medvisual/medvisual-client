@@ -9,8 +9,10 @@ import 'package:medvisual/src/core/widgets/base_button.dart';
 
 @RoutePage()
 class AddDiseasePage extends StatefulWidget {
-  const AddDiseasePage({super.key, required this.onResult});
+  const AddDiseasePage(
+      {super.key, required this.onResult, required this.department});
   final void Function() onResult;
+  final String department;
 
   @override
   State<AddDiseasePage> createState() => _AddDiseasePageState();
@@ -128,6 +130,6 @@ class _AddDiseasePageState extends State<AddDiseasePage> {
     addDiseaseBloc.add(AddDisease(
         name: nameTextController.text,
         description: detailsTextController.text,
-        department: 'Неврология'));
+        department: widget.department));
   }
 }

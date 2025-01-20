@@ -9,6 +9,15 @@ class Login extends AuthManagerEvent {
   final String password;
 }
 
+class Register extends AuthManagerEvent {
+  Register(
+      {required this.username, required this.email, required this.password});
+
+  final String username;
+  final String email;
+  final String password;
+}
+
 class RefreshToken extends AuthManagerEvent {
   RefreshToken({required this.resfreshToken});
 

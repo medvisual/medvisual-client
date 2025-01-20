@@ -28,6 +28,18 @@ class AuthRequest {
     }
   }
 
+  Future<void> signUp(User user) async {
+    try {
+      final String endPoint = _getEndpoint('/api/auth/signup');
+      await dio.post(
+        endPoint,
+        data: user.toJson(),
+      );
+    } catch (e) {
+      throw Exception('Error : $e');
+    }
+  }
+
   Future<AuthResponse> refreshAuth(String refreshToken) async {
     try {
       final String endPoint = _getEndpoint('/api/auth/refresh');

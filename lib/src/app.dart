@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:medvisual/src/bloc/auth_manager_bloc/auth_manager_bloc.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
 import 'package:medvisual/src/router/router.dart';
@@ -19,6 +20,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => GetIt.I<AuthManagerBloc>()),
         BlocProvider(create: (context) => GetIt.I<VisualInformationBloc>()),
         BlocProvider(create: (context) => GetIt.I<DiseasesBloc>()),
       ],

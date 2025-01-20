@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/bloc/auth_manager_bloc/auth_manager_bloc.dart';
 import 'package:medvisual/src/core/widgets/inut_field.dart';
 import 'package:medvisual/src/core/widgets/base_button.dart';
@@ -16,8 +15,6 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  final bloc = GetIt.I<AuthManagerBloc>();
-
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
@@ -26,6 +23,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<AuthManagerBloc>();
     final theme = Theme.of(context);
     return BlocListener<AuthManagerBloc, AuthManagerState>(
       listener: (context, state) {
@@ -38,10 +36,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         CircularProgressIndicator(color: theme.primaryColor));
               });
         } else if (state is Authenticated) {
-          Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
           widget.onResult();
         } else {
-          throw Exception('Failed auth');
+          if (mounted) Navigator.pop(context);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Произошла ошибка')));
         }
       },
       bloc: bloc,
@@ -87,9 +87,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     maxLines: 1),
                 const SizedBox(height: 30),
                 BaseButton(
-                    // TODO: add registration logic
-                    onPressed: () async {
-                      bloc.add(Login(
+                    onPressed: () {
+                      bloc.add(Register(
+                          username: emailController.text,
                           email: emailController.text,
                           password: passwordController.text));
                     },

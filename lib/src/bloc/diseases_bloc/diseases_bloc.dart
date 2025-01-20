@@ -1,11 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/data/remote/models/disease/disease.dart';
 import 'package:medvisual/src/data/remote/models/diseases_page/diseases_page.dart';
 import 'package:medvisual/src/data/local/models/disease_realm.dart';
 import 'package:medvisual/src/data/local/repository/local_disease_repository_impl.dart';
-import 'package:medvisual/src/data/remote/request/disease_request.dart';
 import 'package:medvisual/src/domain/remote_repository/disease_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -30,15 +28,18 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
       return diseases;
     }
 
-    Future<List<Disease>> getDiseasesLocal() async {
+    Future<List<Disease>> getDiseasesLocal(String? department) async {
       talker.log('Trying get diseases from realm');
-      final realmDiseases = await localDiseaseRepository.getDiseases();
+      final realmDiseases =
+          await localDiseaseRepository.getDiseases(department);
       final diseases = dbModelToDisease(realmDiseases);
       return diseases;
     }
 
-    Future<void> saveDiseasesLocal(List<Disease> diseases) async {
+    Future<void> saveDiseasesLocal(
+        List<Disease> diseases, String? department) async {
       talker.log('Saving diseases from endpoint to realm');
+      await localDiseaseRepository.deleteAllDiseases();
       await localDiseaseRepository.setDiseases(diseases.map((e) {
         return e.toRealm();
       }).toList());
@@ -51,7 +52,7 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
           await diseaseRepository.getDiseases(page, department);
       // Saving diseases from api to local database (Also only if it's first page)
       if (diseasesPage.meta.page == 1) {
-        saveDiseasesLocal(diseasesPage.diseases);
+        saveDiseasesLocal(diseasesPage.diseases, department);
       }
 
       // Update page number
@@ -113,14 +114,13 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
   Future<void> _onAddDisease(
       Emitter<DiseasesState> emit, AddDisease event) async {
     try {
-      final diseaseRequest = DiseaseRequest(dio: GetIt.I<Dio>());
       emit(AddDiseaseInProgress());
 
       Disease disease = Disease(
           name: event.name,
           description: event.description,
           department: event.department);
-      await diseaseRequest.addDisease(disease);
+      await diseaseRepository.createDisease(disease);
 
       emit(AddDiseaseComplete());
     } catch (e) {
@@ -131,7 +131,7 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
   Future<void> _onGetDiseasesList(
       Emitter<DiseasesState> emit,
       GetDiseasesList event,
-      Future<List<Disease>> Function() getDiseasesLocal,
+      Future<List<Disease>> Function(String?) getDiseasesLocal,
       Future<DiseasesPage> Function(int page, String? department)
           getDiseasesApi) async {
     try {
@@ -140,7 +140,7 @@ class DiseasesBloc extends Bloc<DiseasesEvent, DiseasesState> {
       // Trying get diseases from local database only if it's first page (Optimization prediction for many diseases)
       if (pageNumber == 1) {
         try {
-          final diseases = await getDiseasesLocal();
+          final diseases = await getDiseasesLocal(event.department);
 
           if (diseases.isNotEmpty) {
             emit(DiseasesListLoaded(diseasesList: diseases));

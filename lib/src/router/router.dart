@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/presentation/categories/view/categories_screen.dart';
-import 'package:medvisual/src/presentation/history/view/history_screen.dart';
+import 'package:medvisual/src/presentation/chatbot/view/chat_bot.dart';
 import 'package:medvisual/src/presentation/diseases/pages/add_disease/view/add_diseases_page.dart';
 import 'package:medvisual/src/presentation/diseases/view/diseases_screen.dart';
 import 'package:medvisual/src/presentation/home/view/home_screen.dart';

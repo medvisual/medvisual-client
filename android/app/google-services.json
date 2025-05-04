@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970469888966",
+    "project_id": "medvisual-20f97",
+    "storage_bucket": "medvisual-20f97.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970469888966:android:ef946b7b53d75301cb58c7",
+        "android_client_info": {
+          "package_name": "com.example.medvisual"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmvvyWIjhtD1fcsNghnsMlmEifTNTvi2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,21 +20,43 @@ class CustomNavigationBar extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 10),
           height: MediaQuery.of(context).size.height * 0.09,
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withOpacity(0.7),
+            color: theme.colorScheme.surface.withAlpha(178),
           ),
           child: StackNavigationBar(
             selectedIndex: currentIndex,
             onSelected: (index) {
               AutoTabsRouter.of(context).setActiveIndex(index);
             },
-            items: const [
-              Icons.category,
-              Icons.all_inbox,
-              Icons.face,
+            icons: [
+              _widgetFromIconData(
+                  iconData: Icons.category, index: 0, theme: theme),
+              Image.asset(
+                'assets/icons/chat.png',
+                height: 28,
+                width: 28,
+                color: currentIndex == 1
+                    ? theme.colorScheme.onSurface
+                    : theme.hintColor.withAlpha(120),
+              ),
+              _widgetFromIconData(
+                  iconData: Icons.person, index: 2, theme: theme),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Icon _widgetFromIconData(
+      {required IconData iconData,
+      required int index,
+      required ThemeData theme}) {
+    return Icon(
+      iconData,
+      size: 28,
+      color: currentIndex == index
+          ? theme.colorScheme.onSurface
+          : theme.hintColor.withAlpha(120),
     );
   }
 }

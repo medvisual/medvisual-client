@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:medvisual/src/presentation/categories/view/categories_screen.dart';
-import 'package:medvisual/src/presentation/chatbot/view/chat_bot.dart';
+import 'package:medvisual/src/presentation/ai_chats/view/ai_chats.dart';
+import 'package:medvisual/src/presentation/chatbot/view/chatbot.dart';
 import 'package:medvisual/src/presentation/diseases/pages/add_disease/view/add_diseases_page.dart';
 import 'package:medvisual/src/presentation/diseases/view/diseases_screen.dart';
 import 'package:medvisual/src/presentation/home/view/home_screen.dart';
@@ -24,7 +25,7 @@ class AppRouter extends RootStackRouter {
           path: '/',
           children: [
             AutoRoute(page: CategoriesRoute.page, path: 'categories'),
-            AutoRoute(page: HistoryRoute.page, path: 'chats'),
+            AutoRoute(page: AIChatsRoute.page, path: 'chats'),
             AutoRoute(page: ProfileRoute.page, path: 'profile'),
           ],
           // transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -58,6 +59,8 @@ class AppRouter extends RootStackRouter {
           path: '/add_disease',
           guards: [AuthGuard()],
         ),
+        AutoRoute(page: ChatbotRoute.page, path: '/chatbot'),
+
         AutoRoute(page: LoginRoute.page, path: '/login'),
         AutoRoute(page: RegistrationRoute.page, path: '/registration'),
       ];

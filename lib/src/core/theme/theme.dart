@@ -10,6 +10,7 @@ const thirdColor = Color.fromARGB(255, 166, 188, 255);
 class AppTheme {
   static final lightTheme = ThemeData(
     colorScheme: const ColorScheme.light(
+        primary: Color(0xFF0D92F4),
         surface: Color(0xFFF7FAFC),
         surfaceContainer: Color(0xFFE8EDF5),
         onSecondary: Color(0xFF4A739C)),
@@ -39,6 +40,7 @@ class AppTheme {
   );
   static final darkTheme = ThemeData(
     colorScheme: const ColorScheme.dark(
+        primary: Color(0xFF0D92F4),
         surface: Color(0xFF0F1A24),
         surfaceContainer: Color(0xFF21364A),
         onSecondary: Color(0xFF8FADCC)),

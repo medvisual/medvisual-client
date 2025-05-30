@@ -67,7 +67,4 @@ Future<void> setupDependencies() async {
   getIt.registerSingleton(visualBloc);
   getIt.registerFactory(() => DiseasesBloc(DiseaseRepositoryImpl(dio: dio)));
   getIt.registerSingleton(authManager);
-
-  // Attempt to initialize user if previously logged in
-  authManager.add(TryInitUser());
 }

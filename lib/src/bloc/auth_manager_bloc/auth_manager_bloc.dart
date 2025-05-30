@@ -38,8 +38,7 @@ class AuthManagerBloc extends Bloc<AuthManagerEvent, AuthManagerState> {
             response.accessToken, response.refreshToken);
         emit(Authenticated());
       } catch (e) {
-        emit(AuthNone());
-        throw Exception('Error was occured in AuthManagerBloc. Error: $e');
+        emit(AuthNone(error: e.toString()));
       }
     });
 

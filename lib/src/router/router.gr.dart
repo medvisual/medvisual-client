@@ -10,6 +10,25 @@
 part of 'router.dart';
 
 /// generated route for
+/// [AIChatsScreen]
+class AIChatsRoute extends PageRouteInfo<void> {
+  const AIChatsRoute({List<PageRouteInfo>? children})
+      : super(
+          AIChatsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AIChatsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AIChatsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AddDiseasePage]
 class AddDiseaseRoute extends PageRouteInfo<AddDiseaseRouteArgs> {
   AddDiseaseRoute({
@@ -70,6 +89,25 @@ class CategoriesRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const CategoriesScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [ChatbotScreen]
+class ChatbotRoute extends PageRouteInfo<void> {
+  const ChatbotRoute({List<PageRouteInfo>? children})
+      : super(
+          ChatbotRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatbotRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ChatbotScreen();
     },
   );
 }
@@ -136,25 +174,6 @@ class DiseasesRouteArgs {
   String toString() {
     return 'DiseasesRouteArgs{key: $key, category: $category, showCheckboxes: $showCheckboxes, onResult: $onResult, initialSelectedDiseases: $initialSelectedDiseases}';
   }
-}
-
-/// generated route for
-/// [HistoryScreen]
-class HistoryRoute extends PageRouteInfo<void> {
-  const HistoryRoute({List<PageRouteInfo>? children})
-      : super(
-          HistoryRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'HistoryRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const HistoryScreen();
-    },
-  );
 }
 
 /// generated route for

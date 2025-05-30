@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   final bloc = GetIt.I<AuthManagerBloc>();
 
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
 
   @override
@@ -52,6 +53,15 @@ class _LoginPageState extends State<LoginPage> {
               )));
           Navigator.pop(context);
           widget.onResult();
+        } else if (state is AuthNone) {
+          if (state.error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  'Ошибка при входе! Проверьте введенные данные',
+                  style: TextStyle(color: Colors.white),
+                )));
+          }
         } else {
           Navigator.pop(context);
         }
@@ -104,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                 BaseButton(
                     // Example of realization
                     onPressed: () async {
+                      // Добавления события в Bloc для входа
                       bloc.add(Login(
                           email: emailController.text,
                           password: passwordController.text));
@@ -114,15 +125,12 @@ class _LoginPageState extends State<LoginPage> {
                     )),
                 const SizedBox(height: 20),
                 TextButton(
-                  child: Text(
-                    'Нету аккаунта? Зарегистрируйся!',
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    widget.onRegistration();
-                  },
-                )
+                    child: Text(
+                      'Нету аккаунта? Зарегистрируйся!',
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: widget.onRegistration)
               ],
             ),
           ),

@@ -15,8 +15,8 @@ class DiseaseRequest {
 
   Future<DiseasesPage> getDiseaseList(int page) async {
     try {
-      final String endPoint = _getEndpoint('/api/diseases/get');
-      final response = await dio.post(endPoint,
+      final String endPoint = _getEndpoint('/api/diseases/');
+      final response = await dio.get(endPoint,
           data: Pagination(page: page, pageSize: 30).getPagination());
       return _handleResponse<DiseasesPage>(response, (response) {
         // Cast to Map<String, dynamic>

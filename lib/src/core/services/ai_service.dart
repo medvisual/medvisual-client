@@ -17,7 +17,7 @@ class VirtualDoctorService {
     return _model!;
   }
 
-  ChatSession get _chatInstance {
+  ChatSession get chatInstance {
     _chatSession ??= _modelInstance.startChat();
     return _chatSession!;
   }
@@ -25,7 +25,7 @@ class VirtualDoctorService {
   Stream<String> getChatStream({required String prompt}) {
     try {
       final messageStream =
-          _chatInstance.sendMessageStream(Content.text(prompt));
+          chatInstance.sendMessageStream(Content.text(prompt));
       return messageStream
           .map((resp) => resp.text ?? '')
           .where((text) => text.isNotEmpty);

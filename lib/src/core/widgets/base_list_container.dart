@@ -26,12 +26,6 @@ class BaseListContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.primaryColor,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-                color: theme.colorScheme.shadow.withOpacity(0.57),
-                blurRadius: 4,
-                offset: const Offset(5, 5))
-          ],
         ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -49,6 +43,7 @@ class BaseListContainer extends StatelessWidget {
                   ? FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
+                        overflow: TextOverflow.fade,
                         text!,
                         style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w500,

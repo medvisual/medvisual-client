@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/bloc/create_visual_bloc/create_visual_bloc.dart';
 import 'package:medvisual/src/bloc/diseases_bloc/diseases_bloc.dart';
+import 'package:medvisual/src/data/local/models/chat_history.dart';
 import 'package:medvisual/src/data/remote/repository/auth_repository_impl.dart';
 import 'package:medvisual/src/data/remote/repository/disease_repository_impl.dart';
 import 'package:medvisual/src/data/remote/repository/visual_repository_impl.dart';
@@ -26,7 +27,9 @@ Future<void> setupDependencies() async {
   await dotenv.load(fileName: ".env");
 
   // Initialize local database (Realm)
-  final config = Configuration.local([RealmDisease.schema]);
+  final config = Configuration.local(
+      [RealmDisease.schema, ChatMessage.schema, ChatHistory.schema],
+      schemaVersion: 4);
   final realm = Realm(config);
 
   // Initialize secure storage
@@ -64,6 +67,7 @@ Future<void> setupDependencies() async {
       VisualInformationBloc(CreateVisualRepositoryImpl(dio: dio));
   // Initialize AuthManagerBloc
   final authManager = AuthManagerBloc(AuthRepositoryImpl(dio));
+  // authManager.add(TryInitUser());
   getIt.registerSingleton(visualBloc);
   getIt.registerFactory(() => DiseasesBloc(DiseaseRepositoryImpl(dio: dio)));
   getIt.registerSingleton(authManager);

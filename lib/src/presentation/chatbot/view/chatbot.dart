@@ -1,16 +1,38 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+import 'dart:convert'; // For jsonEncode
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For Clipboard
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medvisual/src/core/services/ai_service.dart';
+import 'package:medvisual/src/data/local/models/chat_history.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+import 'package:realm/realm.dart'
+    as realm_sdk; // Aliasing to avoid any potential conflicts
+import 'package:firebase_vertexai/firebase_vertexai.dart'
+    as vertex_ai; // Aliasing to avoid conflict
+
+// Adjust the path to your generated Realm model file
 
 import 'package:medvisual/src/core/widgets/widgets.dart';
 
 @RoutePage()
 class ChatbotScreen extends StatefulWidget {
-  const ChatbotScreen({super.key, this.messages});
+  const ChatbotScreen(
+      {super.key,
+      this.messages,
+      required this.chatName,
+      required this.currentChatId});
 
+  final String chatName;
+  final String currentChatId;
+
+  // This 'messages' parameter from the constructor is for initial messages,
+  // but we will primarily rely on loading from/saving to _aiService.chatInstance.history
   final List<Message>? messages;
 
   @override
@@ -18,43 +40,140 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-  // Boolean variable, true only if TextField has text
   bool _inputHasText = false;
   bool _reasonButtonSelected = false;
   bool _searchButtonSelected = false;
+  final _aiService = VirtualDoctorService();
   final TextEditingController _textController = TextEditingController();
   final GlobalKey _menuButtonKey = GlobalKey();
-  late List<Message> _messages;
+  late List<Message> _messages; // This list is for UI display
+  final ScrollController _scrollController = ScrollController();
+  bool _isAiTyping = false;
+
+  // Realm instance
+  late realm_sdk.Realm _realmInstance;
 
   @override
   void initState() {
-    _messages = widget.messages ??
-        [
-          Message(
-              author: Author.ai,
-              content:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")
-        ];
-    _textController.addListener(_onTextInput);
     super.initState();
+    _realmInstance = GetIt.I<realm_sdk.Realm>();
+    // Initialize _messages.
+    // For now, we are not loading history here, only using initial constructor messages or an empty list.
+    // Loading will be a separate step.
+    _messages = widget.messages ?? [];
+
+    // If _aiService.chatInstance.history is already populated (e.g., from a previous session in a more complex setup),
+    // you might want to convert it to your UI _messages list here.
+    // For now, we assume _aiService.chatInstance.history starts fresh or is managed by _aiService.
+    // This example focuses on *saving* on exit.
+
+    _textController.addListener(_onTextInput);
   }
 
   @override
   void dispose() {
+    _saveHistory();
     _textController.removeListener(_onTextInput);
     _textController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _saveHistory() {
+    final history = _aiService.chatInstance.history.toList();
+    if (history.isEmpty) {
+      log('Нет сообщений для сохранения. Ошибка сохранения чата');
+      return;
+    }
+    final serializedHistory = history.map((e) => e.toChatMessage());
+    final chatHistory = ChatHistory(
+        widget.currentChatId.toString(), widget.chatName,
+        messages: serializedHistory);
+    _realmInstance.write(() {
+      _realmInstance.add(chatHistory, update: true);
+    });
   }
 
   void _onTextInput() {
     final hasText = _textController.text.isNotEmpty;
-
-    // Redraw only if state changed
     if (hasText != _inputHasText) {
       setState(() {
         _inputHasText = hasText;
       });
     }
+  }
+
+  void _scrollToBottom({bool? responsePart}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        final currentPosition = _scrollController.position.pixels;
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        if (maxScroll - currentPosition > 40 && responsePart == true) {
+          return;
+        }
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  void _sendMessage() {
+    final inputText = _textController.text.trim();
+    if (inputText.isEmpty) {
+      return;
+    }
+    _textController.clear();
+
+    // Add user's message to the UI list
+    final uiUserMessage = Message(author: Role.user, content: inputText);
+    setState(() {
+      _messages.add(uiUserMessage);
+    });
+    _scrollToBottom();
+
+    // The _aiService.getChatStream will internally add this prompt to its own history.
+    // We don't need to manually add vertex_ai.Content.text(inputText) to _aiService.chatInstance.history here.
+
+    final aiMessagePlaceholderIndex = _messages.length;
+    setState(() {
+      _messages.add(Message(author: Role.model, content: ''));
+      _isAiTyping = true;
+    });
+    _scrollToBottom();
+
+    _aiService.getChatStream(prompt: inputText).listen(
+      (aiResponseChunk) {
+        setState(() {
+          final currentUiMessage = _messages[aiMessagePlaceholderIndex];
+          _messages[aiMessagePlaceholderIndex] = Message(
+            author: currentUiMessage.author,
+            content: currentUiMessage.content + aiResponseChunk,
+          );
+        });
+        _scrollToBottom(responsePart: true);
+      },
+      onError: (error, stackTrace) {
+        log('Ошибка потока виртуального доктора: $error',
+            error: error, stackTrace: stackTrace);
+        setState(() {
+          _messages[aiMessagePlaceholderIndex] = Message(
+            author: Role.model,
+            content: 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
+          );
+          _isAiTyping = false;
+        });
+        _scrollToBottom();
+      },
+      onDone: () {
+        setState(() {
+          _isAiTyping = false;
+        });
+        // After the AI is done, its full response is now part of _aiService.chatInstance.history
+      },
+    );
   }
 
   @override
@@ -67,19 +186,71 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         appBar: AppBar(
           surfaceTintColor: theme.colorScheme.surface,
           backgroundColor: theme.colorScheme.surface,
+          toolbarHeight: 0,
         ),
         body: Column(
           children: [
-            Expanded(
-                child: ListView.builder(
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final currentMessage = _messages[index];
-                      final isUser = currentMessage.author == Author.user;
-                      return isUser
-                          ? UserMessageWidget(currentMessage: currentMessage)
-                          : AiMessageWidget(currentMessage: currentMessage);
-                    })),
+            _messages.isEmpty
+                ? Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/chatgpt_icon.png",
+                              width: 50,
+                              height: 50,
+                              color: theme.colorScheme.onSurfaceVariant),
+                          const SizedBox(height: 15),
+                          Text(
+                            'Начните чат с ИИ',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurfaceVariant,
+                              fontFamily: GoogleFonts.raleway().fontFamily,
+                            ),
+                          ),
+                          Text(
+                            'Вы можете задавать вопросы или просить совета',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurfaceVariant
+                                  .withAlpha(160),
+                              fontFamily: GoogleFonts.raleway().fontFamily,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        final currentMessage = _messages[index];
+                        final isUser = currentMessage.author == Role.user;
+                        if (isUser) {
+                          return UserMessageWidget(
+                              currentMessage: currentMessage);
+                        } else {
+                          bool showTypingIndicator = _isAiTyping &&
+                              index == _messages.length - 1 &&
+                              currentMessage.content.isEmpty;
+
+                          return AiMessageWidget(
+                            // Not using MarkdownWidget here as per your request not to change UI
+                            currentMessage: currentMessage,
+                            isTyping: showTypingIndicator,
+                          );
+                        }
+                      },
+                    ),
+                  ),
             _buildTextInputField(context)
           ],
         ),
@@ -91,103 +262,108 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     final theme = Theme.of(context);
 
     return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainer,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 200),
-                child: Scrollbar(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: 'Спросите что-нибудь',
-                      hintStyle: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w600,
-                        color: theme.hintColor,
-                        fontFamily: GoogleFonts.raleway().fontFamily,
-                      ),
-                    ),
-                    textInputAction: TextInputAction.newline,
-                    minLines: 1,
-                    maxLines: null,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      width: double.infinity,
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainer,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 150),
+              child: TextField(
+                controller: _textController,
+                decoration: InputDecoration(
+                  hintText: 'Спросите что-нибудь...',
+                  hintStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: theme.hintColor.withAlpha((0.8 * 255).round()),
+                    fontFamily: GoogleFonts.raleway().fontFamily,
                   ),
+                  border: InputBorder.none,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
+                textInputAction: TextInputAction.newline,
+                keyboardType: TextInputType.multiline,
+                minLines: 1,
+                maxLines: 5,
               ),
-              Row(
-                children: [
-                  const SizedBox(width: 12),
-                  VisualIconButton(
-                    key: _menuButtonKey,
-                    onPressed: _showCupertinoMenu,
-                    icon: const Icon(
-                      Icons.add,
-                    ),
-                    borderWidth: 2,
-                    buttonRadius: 4,
-                    borderColor: Colors.grey.withAlpha(120),
-                  ),
-                  const SizedBox(width: 10),
-                  VisualIconButton(
-                    onPressed: _onReasonButtonTap,
-                    icon: Icon(
-                      Icons.lightbulb_outline_rounded,
-                      color: _reasonButtonSelected ? theme.primaryColor : null,
-                    ),
-                    backgroundColor: _reasonButtonSelected
-                        ? theme.primaryColor.withAlpha(90)
-                        : null,
-                    borderWidth: 2,
-                    buttonRadius: 4,
-                    borderColor: _reasonButtonSelected
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const SizedBox(width: 8),
+                VisualIconButton(
+                  key: _menuButtonKey,
+                  onPressed: _showCupertinoMenu,
+                  icon: const Icon(Icons.add, size: 26),
+                  borderWidth: 1.5,
+                  buttonRadius: 8,
+                  borderColor: Colors.grey.withAlpha(100),
+                ),
+                const SizedBox(width: 8),
+                VisualIconButton(
+                  onPressed: _onReasonButtonTap,
+                  icon: Icon(
+                    Icons.lightbulb_outline_rounded,
+                    size: 24,
+                    color: _reasonButtonSelected
                         ? theme.primaryColor
-                        : Colors.grey.withAlpha(120),
+                        : theme.iconTheme.color?.withAlpha((0.7 * 255).round()),
                   ),
-                  const SizedBox(width: 10),
-                  VisualIconButton(
-                    onPressed: _onSearchButtonTap,
-                    icon: Row(
-                      children: [
-                        Icon(
-                          Icons.language,
-                          color:
-                              _searchButtonSelected ? theme.primaryColor : null,
-                        ),
-                      ],
-                    ),
-                    backgroundColor: _searchButtonSelected
-                        ? theme.primaryColor.withAlpha(90)
-                        : null,
-                    borderWidth: 2,
-                    buttonRadius: 4,
-                    borderColor: _searchButtonSelected
+                  backgroundColor: _reasonButtonSelected
+                      ? theme.primaryColor.withAlpha(60)
+                      : null,
+                  borderWidth: 1.5,
+                  buttonRadius: 8,
+                  borderColor: _reasonButtonSelected
+                      ? theme.primaryColor.withAlpha((0.7 * 255).round())
+                      : Colors.grey.withAlpha(100),
+                ),
+                const SizedBox(width: 8),
+                VisualIconButton(
+                  onPressed: _onSearchButtonTap,
+                  icon: Icon(
+                    Icons.language,
+                    size: 24,
+                    color: _searchButtonSelected
                         ? theme.primaryColor
-                        : Colors.grey.withAlpha(120),
+                        : theme.iconTheme.color?.withAlpha((0.7 * 255).round()),
                   ),
-                  const Spacer(),
-                  VisualIconButton(
-                    backgroundColor: _inputHasText
-                        ? theme.primaryColor
-                        : theme.primaryColor.withAlpha(120),
-                    onPressed: _sendMessage,
-                    icon: const Icon(
-                      Icons.arrow_upward,
-                      color: Colors.white,
-                    ),
+                  backgroundColor: _searchButtonSelected
+                      ? theme.primaryColor.withAlpha(60)
+                      : null,
+                  borderWidth: 1.5,
+                  buttonRadius: 8,
+                  borderColor: _searchButtonSelected
+                      ? theme.primaryColor.withAlpha((0.7 * 255).round())
+                      : Colors.grey.withAlpha(100),
+                ),
+                const Spacer(),
+                VisualIconButton(
+                  backgroundColor: _inputHasText
+                      ? theme.primaryColor
+                      : theme.disabledColor.withAlpha(120),
+                  onPressed: _inputHasText ? _sendMessage : null,
+                  icon: const Icon(
+                    Icons.arrow_upward,
+                    color: Colors.white,
+                    size: 26,
                   ),
-                  const SizedBox(width: 15)
-                ],
-              ),
-              const SizedBox(height: 5)
-            ],
-          ),
-        ));
+                  buttonRadius: 8,
+                ),
+                const SizedBox(width: 8)
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showCupertinoMenu() async {
@@ -195,50 +371,27 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         _menuButtonKey.currentContext?.findRenderObject() as RenderBox?;
 
     if (buttonBox == null) return;
-
     final Offset buttonTopLeft = buttonBox.localToGlobal(Offset.zero);
-    final Offset buttonBottomRight =
-        buttonBox.localToGlobal(buttonBox.size.bottomRight(Offset.zero));
-
-    final Offset upperPoint = buttonTopLeft.translate(10, -10);
-
-    final Rect position = Rect.fromPoints(upperPoint, buttonBottomRight);
+    const double estimatedMenuHeight = 150.0;
+    const double gap = 5.0;
+    final Rect menuPosition = Rect.fromLTWH(
+        buttonTopLeft.dx,
+        buttonTopLeft.dy - estimatedMenuHeight - gap,
+        buttonBox.size.width + 40,
+        estimatedMenuHeight);
 
     await showPullDownMenu(
       context: context,
+      position: menuPosition,
       items: [
         PullDownMenuItem(
-          onTap: () {},
-          title: 'Фотографии',
-          icon: CupertinoIcons.photo,
-        ),
+            onTap: () {}, title: 'Фото', icon: CupertinoIcons.photo),
         PullDownMenuItem(
-          onTap: () {},
-          title: 'Камера',
-          icon: CupertinoIcons.camera,
-        ),
+            onTap: () {}, title: 'Камера', icon: CupertinoIcons.camera),
         PullDownMenuItem(
-          onTap: () {},
-          title: 'Файлы',
-          icon: CupertinoIcons.folder,
-        ),
+            onTap: () {}, title: 'Файлы', icon: CupertinoIcons.folder),
       ],
-      position: position,
     );
-  }
-
-  void _sendMessage() {
-    final inputText = _textController.text;
-    // Check for non empty input
-    if (inputText == "") {
-      return;
-    }
-    _textController.clear();
-    // Build message instance from input text
-    final message = Message(author: Author.user, content: inputText);
-    setState(() {
-      _messages.add(message);
-    });
   }
 
   void _onReasonButtonTap() {
@@ -254,6 +407,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 }
 
+// Your UserMessageWidget and AiMessageWidget (original, without MarkdownWidget)
 class UserMessageWidget extends StatelessWidget {
   const UserMessageWidget({
     super.key,
@@ -266,28 +420,29 @@ class UserMessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const SizedBox(width: 60),
+          const SizedBox(width: 50),
           Flexible(
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainer,
+                  color: theme.colorScheme.primaryContainer,
                   borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(5))),
+                      topLeft: Radius.circular(18),
+                      topRight: Radius.circular(18),
+                      bottomLeft: Radius.circular(18),
+                      bottomRight: Radius.circular(4))),
               child: Text(
                 currentMessage.content,
                 softWrap: true,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: Colors.white, // This was your original color
                   fontFamily: GoogleFonts.raleway().fontFamily,
                 ),
               ),
@@ -303,24 +458,54 @@ class AiMessageWidget extends StatelessWidget {
   const AiMessageWidget({
     super.key,
     required this.currentMessage,
+    this.isTyping = false,
   });
 
   final Message currentMessage;
+  final bool isTyping;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    if (isTyping) {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+                backgroundColor:
+                    theme.colorScheme.onSurface.withAlpha((0.8 * 255).round()),
+                child: Image.asset(
+                  width: 25,
+                  height: 25,
+                  "assets/images/chatgpt_icon.png",
+                  color: theme.colorScheme.surface,
+                )),
+            const SizedBox(width: 10),
+            const Padding(
+              padding: EdgeInsets.only(top: 10.0),
+              child: CupertinoActivityIndicator(radius: 10),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-              backgroundColor: theme.colorScheme.onSurface,
+              backgroundColor:
+                  theme.colorScheme.onSurface.withAlpha((0.8 * 255).round()),
               child: Image.asset(
-                width: 27,
-                height: 27,
+                width: 25,
+                height: 25,
                 "assets/images/chatgpt_icon.png",
                 color: theme.colorScheme.surface,
               )),
@@ -330,43 +515,70 @@ class AiMessageWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(18),
+                          bottomLeft: Radius.circular(18),
+                          bottomRight: Radius.circular(18))),
                   child: Text(
-                    currentMessage.content,
-                    softWrap: true,
+                    // Using Text widget as requested
+                    currentMessage.content.isEmpty && !isTyping
+                        ? "..."
+                        : currentMessage.content,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurfaceVariant,
                       fontFamily: GoogleFonts.raleway().fontFamily,
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.copy_rounded,
-                      color: theme.hintColor,
-                    ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.replay,
-                      color: theme.hintColor,
-                    ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.thumb_up_off_alt_outlined,
-                      color: theme.hintColor,
-                    ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.thumb_down_off_alt_rounded,
-                      color: theme.hintColor,
-                    )
-                  ],
-                )
+                if (currentMessage.content.isNotEmpty && !isTyping) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                          icon: Icon(Icons.copy_rounded,
+                              color: theme.hintColor, size: 20),
+                          onPressed: () {
+                            Clipboard.setData(
+                                ClipboardData(text: currentMessage.content));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Скопировано в буфер обмена!'),
+                              duration: Duration(seconds: 1),
+                            ));
+                          },
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero),
+                      const SizedBox(width: 4),
+                      IconButton(
+                          icon: Icon(Icons.replay,
+                              color: theme.hintColor, size: 20),
+                          onPressed: () {/* TODO: Повторить */},
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero),
+                      const SizedBox(width: 4),
+                      IconButton(
+                          icon: Icon(Icons.thumb_up_off_alt_outlined,
+                              color: theme.hintColor, size: 20),
+                          onPressed: () {/* TODO: Нравится */},
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero),
+                      const SizedBox(width: 4),
+                      IconButton(
+                          icon: Icon(Icons.thumb_down_off_alt_rounded,
+                              color: theme.hintColor, size: 20),
+                          onPressed: () {/* TODO: Не нравится */},
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero),
+                    ],
+                  )
+                ]
               ],
             ),
           ),
@@ -376,14 +588,15 @@ class AiMessageWidget extends StatelessWidget {
   }
 }
 
+// Your local Message class and Role enum
 class Message {
   Message({
     required this.author,
     required this.content,
   });
 
-  final Author author;
+  final Role author;
   final String content;
 }
 
-enum Author { ai, user }
+enum Role { model, user }

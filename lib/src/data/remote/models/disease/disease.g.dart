@@ -14,7 +14,7 @@ Disease _$DiseaseFromJson(Map<String, dynamic> json) => Disease(
     );
 
 Map<String, dynamic> _$DiseaseToJson(Disease instance) => <String, dynamic>{
-      'id': instance.id,
+      if (instance.id case final value?) 'id': value,
       'name': instance.name,
       'description': instance.description,
       'department': instance.department,

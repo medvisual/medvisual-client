@@ -13,6 +13,7 @@ import 'package:medvisual/src/presentation/settings/view/settings_screen.dart';
 import 'package:medvisual/src/presentation/visual/view/visual_screen.dart';
 import 'package:medvisual/src/router/auth_route_guard.dart';
 import 'package:medvisual/src/presentation/auth/view/registration_page.dart';
+import 'package:realm/realm.dart';
 
 part 'router.gr.dart';
 
@@ -53,6 +54,11 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           page: DiseasesRoute.page,
           path: '/diseases',
+        ),
+        AutoRoute(page: SettingsRoute.page, path: '/settings'),
+        AutoRoute(
+          page: VisualRoute.page,
+          path: '/visual',
         ),
         AutoRoute(
           page: AddDiseaseRoute.page,

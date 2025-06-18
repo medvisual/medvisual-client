@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 part 'disease.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class Disease extends Equatable {
   const Disease(
       {this.id,

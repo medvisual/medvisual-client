@@ -1,11 +1,58 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:medvisual/src/core/widgets/base_button.dart';
+import 'package:medvisual/src/data/local/models/chat_history.dart';
+import 'package:medvisual/src/presentation/chatbot/view/chatbot.dart';
 import 'package:medvisual/src/router/router.dart';
+import 'package:realm/realm.dart';
 
 @RoutePage()
-class AIChatsScreen extends StatelessWidget {
+class AIChatsScreen extends StatefulWidget {
   const AIChatsScreen({super.key});
+
+  @override
+  State<AIChatsScreen> createState() => _AIChatsScreenState();
+}
+
+class _AIChatsScreenState extends State<AIChatsScreen> {
+  final List<ChatHistory> _chats = [];
+  late final StreamSubscription _realmSub;
+  late final Realm _realm;
+
+  @override
+  void initState() {
+    super.initState();
+    _realm = GetIt.I<Realm>();
+    _syncChats();
+  }
+
+  _syncChats() {
+    try {
+      final chatsRealm = _realm.all<ChatHistory>();
+      final chats = chatsRealm.toList();
+
+      _chats.addAll(chats.toList());
+      _realmSub = chatsRealm.changes.listen((changes) {
+        log('Получено изменение базы данных');
+        setState(() {
+          _chats.clear();
+          _chats.addAll(changes.results.toList());
+        });
+      });
+// ignore: empty_catches
+    } catch (e) {}
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _realmSub.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +65,35 @@ class AIChatsScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 60),
             child: CustomScrollView(slivers: [
               SliverAppBar(
-                title: Text('MedGPT'),
+                title: const Text('MedGPT'),
                 surfaceTintColor: theme.colorScheme.surface,
                 backgroundColor: theme.colorScheme.surface,
                 centerTitle: true,
                 pinned: true,
               ),
               SliverList.builder(
-                  itemCount: 10,
+                  itemCount: _chats.length,
                   itemBuilder: (context, index) {
-                    return HistoryListElement();
+                    return HistoryListElement(
+                      onTap: () {
+                        final currentElement = _chats[index];
+                        final messages = currentElement.messages.map((e) {
+                          final Role role =
+                              e.role == 'user' ? Role.user : Role.model;
+
+                          return Message(author: role, content: e.text);
+                        }).toList();
+                        context.router
+                            .push(ChatbotRoute(
+                                chatName: currentElement.name,
+                                currentChatId: currentElement.id,
+                                messages: messages))
+                            .then((object) {
+                          setState(() {});
+                        });
+                      },
+                      chat: _chats[index],
+                    );
                   })
             ]),
           ),
@@ -38,10 +104,12 @@ class AIChatsScreen extends StatelessWidget {
                 height: 50,
                 child: BaseButton(
                   onPressed: () {
-                    context.router.push(const ChatbotRoute());
+                    context.router.push(ChatbotRoute(
+                        chatName: 'Название чата',
+                        currentChatId: Uuid.v4().toString()));
                   },
                   text: 'Новый чат',
-                  margin: EdgeInsets.symmetric(horizontal: 130),
+                  margin: const EdgeInsets.symmetric(horizontal: 130),
                 )),
           ),
         ],
@@ -51,14 +119,19 @@ class AIChatsScreen extends StatelessWidget {
 }
 
 class HistoryListElement extends StatelessWidget {
-  const HistoryListElement({super.key});
+  const HistoryListElement(
+      {super.key, required this.chat, required this.onTap});
+
+  final ChatHistory chat;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ListTile(
+      onTap: onTap,
       title: Text(
-        'Текстовые названия DioHыоesada',
+        chat.name,
         overflow: TextOverflow.fade,
         softWrap: false,
       ),
@@ -66,7 +139,7 @@ class HistoryListElement extends StatelessWidget {
         '20:20',
         style: TextStyle(color: theme.hintColor),
       ),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.arrow_forward_ios,
         size: 20,
       ),

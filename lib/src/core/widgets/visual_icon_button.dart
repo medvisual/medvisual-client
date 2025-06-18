@@ -8,7 +8,7 @@ class VisualIconButton extends StatefulWidget {
       this.borderColor,
       this.borderWidth,
       this.duration = const Duration(milliseconds: 150),
-      required this.onPressed,
+      this.onPressed,
       this.margin,
       this.buttonRadius = 8})
       : assert(
@@ -46,7 +46,7 @@ class VisualIconButton extends StatefulWidget {
 
   /// Function which would be called when
   /// this button would be tapped
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   final double buttonRadius;
 

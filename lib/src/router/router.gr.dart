@@ -95,10 +95,21 @@ class CategoriesRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ChatbotScreen]
-class ChatbotRoute extends PageRouteInfo<void> {
-  const ChatbotRoute({List<PageRouteInfo>? children})
-      : super(
+class ChatbotRoute extends PageRouteInfo<ChatbotRouteArgs> {
+  ChatbotRoute({
+    Key? key,
+    List<Message>? messages,
+    required String chatName,
+    required String currentChatId,
+    List<PageRouteInfo>? children,
+  }) : super(
           ChatbotRoute.name,
+          args: ChatbotRouteArgs(
+            key: key,
+            messages: messages,
+            chatName: chatName,
+            currentChatId: currentChatId,
+          ),
           initialChildren: children,
         );
 
@@ -107,9 +118,37 @@ class ChatbotRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ChatbotScreen();
+      final args = data.argsAs<ChatbotRouteArgs>();
+      return ChatbotScreen(
+        key: args.key,
+        messages: args.messages,
+        chatName: args.chatName,
+        currentChatId: args.currentChatId,
+      );
     },
   );
+}
+
+class ChatbotRouteArgs {
+  const ChatbotRouteArgs({
+    this.key,
+    this.messages,
+    required this.chatName,
+    required this.currentChatId,
+  });
+
+  final Key? key;
+
+  final List<Message>? messages;
+
+  final String chatName;
+
+  final String currentChatId;
+
+  @override
+  String toString() {
+    return 'ChatbotRouteArgs{key: $key, messages: $messages, chatName: $chatName, currentChatId: $currentChatId}';
+  }
 }
 
 /// generated route for
